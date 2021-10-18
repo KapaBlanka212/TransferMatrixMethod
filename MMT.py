@@ -71,7 +71,7 @@ P_m = np.matrix([[expr,0],[0,expr2]])
 P_K108 = np.matrix([[np.exp(1j*fi(n_(const.n_K108,k_K108),d_K108)),0],[0,np.exp(-1j*fi(n_(const.n_K108,k_K108),d_K108))]])
 D0 = np.matrix([[(1/(2*nm))*(nm+const.n_vac),(1/(2*nm))*(nm-const.n_vac)],(1/(2*nm))*[(nm-const.n_vac),(1/(2*nm))*(nm+const.n_vac)]])
 D1 = np.matrix([[(1/(2*n_(const.n_K108,k_K108)))*(nm+n_(const.n_K108,k_K108)),(1/(2*n_(const.n_K108,k_K108)))*(n_(const.n_K108,k_K108)-nm)],[(1/(2*n_(const.n_K108,k_K108)))*(n_(const.n_K108,k_K108)-nm),(1/(2*n_(const.n_K108,k_K108)))*(nm+n_(const.n_K108,k_K108))]])
-D2 = np.matrix([[(const.n_vac+n_(const.n_K108,k_K108)),(const.n_vac - n_(const.n_K108,k_K108))],[(const.n_vac-n_(const.n_K108,k_K108)),(const.n_vac+n_(const.n_K108,k_K108))(1/(2*const.n_vac))*]])
+D2 = np.matrix([[(const.n_vac+n_(const.n_K108,k_K108)),(const.n_vac - n_(const.n_K108,k_K108))],[(const.n_vac-n_(const.n_K108,k_K108)),(const.n_vac+n_(const.n_K108,k_K108))(1/(2*const.n_vac))]])
 
 #x = Symbol('x')
 #print(fi(nm,dm))
