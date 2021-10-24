@@ -149,30 +149,30 @@ def minimization(d_0, Ne_0, t_0, eps_Inf_0, eps2):
     while S_T_0 and S_R_0 > eps2:
         if S_T_0 - eps2 > eps2 * 10 ** (4):
             d_0 += random.uniform(0, 10)
-            Ne_0 += random.uniform(0, 10)
-            t_0 += random.uniform(0, 10)
+            Ne_0 += random.uniform(0.1*10**(20),0.2*10**(20))
+            t_0 += random.uniform(0.1*10**(14),0.2*10**(14))
             eps_Inf_0 += random.uniform(0, 0.01)
             if d_0 > 500 * 10 ** (-5):
-                d_0 -= random.uniform(10, 15)
+                d_0 -= random.uniform(10, 30)
             if Ne_0 > 10 ** (21):
-                d_0 -= random.uniform(10, 15)
+                Ne_0 -= random.uniform(0.2*10**(20),0.4*10**(20))
             if t_0 > 10 ** (15):
-                t_0 -= random.uniform(10, 15)
+                t_0 -= random.uniform(0.2*10**(14),0.4*10**(14))
             if eps_Inf_0 > 5:
-                eps_Inf_0 -= random.uniform(0.01, 0.02)
+                eps_Inf_0 -= random.uniform(0.01, 0.03)
         else:
-            d_0 += random.uniform(0, 100)
-            Ne_0 += random.uniform(0, 100)
-            t_0 += random.uniform(0, 100)
+            d_0 += random.uniform(0, 20)
+            Ne_0 += random.uniform(1*10**(20),2*10**(20))
+            t_0 += random.uniform(1*10**(14),0.2*10**(14))
             eps_Inf_0 += random.uniform(0, 0.1)
             if d_0 > 500 * 10 ** (-5):
-                d_0 -= random.uniform(100, 120)
+                d_0 -= random.uniform(20, 30)
             if Ne_0 > 10 ** (21):
-                d_0 -= random.uniform(100, 120)
+                Ne_0 -= random.uniform((2*10**(20),4*10**(20)))
             if t_0 > 10 ** (15):
-                t_0 -= random.uniform(100, 120)
+                t_0 -= random.uniform((2*10**(14),4*10**(14)))
             if eps_Inf_0 > 5:
-                eps_Inf_0 -= random.uniform(100, 120)
+                eps_Inf_0 -= random.uniform(0.1, 0.3)
     S = mmt(indx2, Ne_0, eps_Inf_0, t_0, d_0) - full_exp
     S_T_0 = np.std(S[0, :])
     S_R_0 = np.std(S[1, :])
