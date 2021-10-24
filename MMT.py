@@ -13,7 +13,7 @@ e0 = 1.6*10**(-19) # Kulon
 const = MaterialConstant.MaterialConstant()
 c = const.lightspeed*10**(-2) # cm/c
 d_K108 = const.d_K108 #  cm
-l = const.full_wawelenght # cm
+l = const.full_wavelenght # cm
 w = 2*pi*c*(l) # sec^(-1)
 n_K108 = const.n_K108 # K108
 k_K108 = (const.alfa_K108)*(l/(4*pi)) # K108
@@ -21,6 +21,11 @@ n_vac = const.n_vac # VACUUM
 k_vac = const.alfa_vac # 0 == 0
 i = 1j # Im 1
 indx = const.indx
+#==========================================================#
+#                 EXPERIMENTAL CONSTANT                    #
+#==========================================================#
+T_exp = const.T_exp
+R_exp = const.R_exp
 #==========================================================#
 #                   CHANGES CONSTANT                       #
 #==========================================================#
@@ -72,20 +77,21 @@ def MMT(x):
                          [0, np.exp(-i * fi(w[m], n_(nm, km), dm))]])
         # 1-2
         D1 = (1 / (2 * n_(n_K108[m], k_K108[m]))) * np.matrix([[nm + n_(n_K108[m], k_K108[m]), n_(n_K108[m], k_K108[m]) - nm],
-                                                           [n_(n_K108[m], k_K108[m]) - nm, nm + n_(n_K108[m], k_K108[m])]])
+                                                               [n_(n_K108[m], k_K108[m]) - nm, nm + n_(n_K108[m], k_K108[m])]])
         # 2
         P_K108 = np.matrix([[np.exp(i * fi(w[m], n_(n_K108[m], k_K108[m]), d_K108)), 0],
-                        [0, np.exp(-i * fi(w[m], n_(n_K108[m], k_K108[m]), d_K108))]])
+                            [0, np.exp(-i * fi(w[m], n_(n_K108[m], k_K108[m]), d_K108))]])
         # 2-3
         D2 = (1 / (2 * n_vac[m])) * np.matrix([[n_vac[m] + n_(n_K108[m], k_K108[m]), n_vac[m] - n_(n_K108[m], k_K108[m])],
-                                           [(n_vac[m] - n_(n_K108[m], k_K108[m])),n_vac[m] + n_(n_K108[m], k_K108[m])]])
+                                               [(n_vac[m] - n_(n_K108[m], k_K108[m])),n_vac[m] + n_(n_K108[m], k_K108[m])]])
         M = D2 @ P_K108 @ D1 @ P_m @ D0
         T = abs(M[0,0]-(M[0,1]*M[1,0])/M[1,1])
         Tm.append(T)
         R = abs(M[1,0]/M[1,1])**(2)
         Rm.append(R)
     anser = np.array([[Tm],[Rm]])
+
     return anser
-print(MMT(indx))
+#print(MMT(indx))
 end1 = time.time()
 print(end1 - start1)
