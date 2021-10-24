@@ -29,7 +29,7 @@ R_exp = const.R_exp
 #==========================================================#
 #                   CHANGES CONSTANT                       #
 #==========================================================#
-dm = 4*10**(-5) # m # 5*10**(-5)
+dm = 400*10**(-5) # m # 500*10**(-5)
 Ne =  10 ** (20) # cm^-3 # 10 ** (21)
 t = 10**(14) # 1/tau # 10*(15)
 eps_Inf = 3 # 5
@@ -70,19 +70,19 @@ def MMT(x):
         eps_ = eps(eps_Inf, wp, t, w[m])
         nm = n_m(eps_)
         km = k_m(eps_)
-        D0 = (1 / 2) * (1 / nm) * np.matrix([[nm + n_vac[m], nm - n_vac[m]],
+        D0 = (1 / 2) * (1 / nm) * np.array([[nm + n_vac[m], nm - n_vac[m]],
                                              [nm - n_vac[m], nm + n_vac[m]]])
         # 1
-        P_m = np.matrix([[np.exp(i * fi(w[m], n_(nm, km), dm)), 0],
+        P_m = np.array([[np.exp(i * fi(w[m], n_(nm, km), dm)), 0],
                          [0, np.exp(-i * fi(w[m], n_(nm, km), dm))]])
         # 1-2
         D1 = (1 / (2 * n_(n_K108[m], k_K108[m]))) * np.matrix([[nm + n_(n_K108[m], k_K108[m]), n_(n_K108[m], k_K108[m]) - nm],
                                                                [n_(n_K108[m], k_K108[m]) - nm, nm + n_(n_K108[m], k_K108[m])]])
         # 2
-        P_K108 = np.matrix([[np.exp(i * fi(w[m], n_(n_K108[m], k_K108[m]), d_K108)), 0],
+        P_K108 = np.array([[np.exp(i * fi(w[m], n_(n_K108[m], k_K108[m]), d_K108)), 0],
                             [0, np.exp(-i * fi(w[m], n_(n_K108[m], k_K108[m]), d_K108))]])
         # 2-3
-        D2 = (1 / (2 * n_vac[m])) * np.matrix([[n_vac[m] + n_(n_K108[m], k_K108[m]), n_vac[m] - n_(n_K108[m], k_K108[m])],
+        D2 = (1 / (2 * n_vac[m])) * np.array([[n_vac[m] + n_(n_K108[m], k_K108[m]), n_vac[m] - n_(n_K108[m], k_K108[m])],
                                                [(n_vac[m] - n_(n_K108[m], k_K108[m])),n_vac[m] + n_(n_K108[m], k_K108[m])]])
         M = D2 @ P_K108 @ D1 @ P_m @ D0
         T = abs(M[0,0]-(M[0,1]*M[1,0])/M[1,1])
@@ -90,7 +90,6 @@ def MMT(x):
         R = abs(M[1,0]/M[1,1])**(2)
         Rm.append(R)
     anser = np.array([[Tm],[Rm]])
-
     return anser
 #print(MMT(indx))
 end1 = time.time()
