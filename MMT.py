@@ -125,59 +125,52 @@ def mmt(x, Ne, eps_Inf, t, dm):  # x - size w, other parameters membrane
 
 
 # ==========================================================#
-#                  CALCULATE RMS DEVIATION                 #
-# ==========================================================#
-S = mmt(indx2, Ne_0, eps_Inf_0, t_0, d_0) - full_exp
-print(S, S.shape)
-S_T_0 = np.std(S[0, :])
-print(S_T_0)
-S_R_0 = np.std(S[1, :])
-print(S_R_0)
-
-
-# ==========================================================#
 #                  FIND OPTIMAL PARAMETERS                 #
 # ==========================================================#
 
-def minimization(d_0, Ne_0, t_0, eps_Inf_0, eps2):
-    S = mmt(indx2, Ne_0, eps_Inf_0, t_0, d_0) - full_exp
-    print(S, S.shape)
-    S_T_0 = np.std(S[0, :])
-    print(S_T_0)
-    S_R_0 = np.std(S[1, :])
-    print(S_R_0)
-    while S_T_0 and S_R_0 > eps2:
-        if S_T_0 - eps2 > eps2 * 10 ** (4):
-            d_0 += random.uniform(0, 10)
-            Ne_0 += random.uniform(0.1*10**(20),0.2*10**(20))
-            t_0 += random.uniform(0.1*10**(14),0.2*10**(14))
-            eps_Inf_0 += random.uniform(0, 0.01)
-            if d_0 > 500 * 10 ** (-5):
-                d_0 -= random.uniform(10, 30)
-            if Ne_0 > 10 ** (21):
-                Ne_0 -= random.uniform(0.2*10**(20),0.4*10**(20))
-            if t_0 > 10 ** (15):
-                t_0 -= random.uniform(0.2*10**(14),0.4*10**(14))
-            if eps_Inf_0 > 5:
-                eps_Inf_0 -= random.uniform(0.01, 0.03)
-        else:
-            d_0 += random.uniform(0, 20)
-            Ne_0 += random.uniform(1*10**(20),2*10**(20))
-            t_0 += random.uniform(1*10**(14),0.2*10**(14))
-            eps_Inf_0 += random.uniform(0, 0.1)
-            if d_0 > 500 * 10 ** (-5):
-                d_0 -= random.uniform(20, 30)
-            if Ne_0 > 10 ** (21):
-                Ne_0 -= random.uniform((2*10**(20),4*10**(20)))
-            if t_0 > 10 ** (15):
-                t_0 -= random.uniform((2*10**(14),4*10**(14)))
-            if eps_Inf_0 > 5:
-                eps_Inf_0 -= random.uniform(0.1, 0.3)
-    S = mmt(indx2, Ne_0, eps_Inf_0, t_0, d_0) - full_exp
-    S_T_0 = np.std(S[0, :])
-    S_R_0 = np.std(S[1, :])
-    return S_T_0, S_R_0, d_0, Ne_0, t_0, eps_Inf_0
-print(minimization(d_0, Ne_0, t_0, eps_Inf_0, eps2))
 
+def minimization(d_0, Ne_0, t_0, eps_Inf_0, eps2):
+    iter = 0
+    S = mmt(indx2, Ne_0, eps_Inf_0, t_0, d_0) - full_exp
+    S_T_0 = np.std(S[0, :])
+    S_R_0 = np.std(S[1, :])
+    while S_T_0 and S_R_0 > eps2:
+        iter += 1
+        S_T_0 = np.array([iter-1, np.std(S[0, :])])
+        S_R_0 = np.array([iter-1, np.std(S[1, :])])
+        d_0 += random.uniform(0, 100 * 10 ** (-5))
+        Ne_0 += random.uniform(1 * 10 ** (20), 10 * 10 ** (20))
+        t_0 += random.uniform(1 * 10 ** (14), 10 * 10 ** (14))
+        eps_Inf_0 += random.uniform(0, 0.1)
+        S = mmt(indx2, Ne_0, eps_Inf_0, t_0, d_0) - full_exp
+        S_T = np.array([iter,np.std(S[0, :])])
+        S_R = np.array([iter,np.std(S[1, :])])
+        print(S_T, S_R,'iter =',iter, 'd ==', d_0, 'Ne ==', Ne_0, 't == ', t_0, 'Eps_Inf ==', eps_Inf_0)
+        while S_R[1] - S_R_0[1] < 0 and S_T[1] - S_T_0[1] < 0:
+            if abs(S_R[1] - S_R_0[1]) < eps2:
+                d_0 += random.uniform(0, 10 * 100 ** (-5))
+                Ne_0 += random.uniform(10 * 10 ** (20), 20 * 10 ** (20))
+                t_0 += random.uniform(10 * 10 ** (14), 20 * 10 ** (14))
+                eps_Inf_0 += random.uniform(0, 0.1)
+            else:
+                d_0 += random.uniform(0, 1 * 10 ** (-5))
+                Ne_0 += random.uniform(1 * 10 ** (20), 2 * 10 ** (20))
+                t_0 += random.uniform(1 * 10 ** (14), 2 * 10 ** (14))
+                eps_Inf_0 += random.uniform(0, 0.1)
+        if S_R[1] - S_R_0[1] > 0 and  S_T[1] - S_T_0[1] > 0:
+            if  abs(S_R[1] - S_R_0[1]) < eps2:
+                d_0 -= random.uniform(0, 10 * 100 ** (-5))
+                Ne_0 -= random.uniform(10 * 10 ** (20), 20 * 10 ** (20))
+                t_0 -= random.uniform(10 * 10 ** (14), 20 * 10 ** (14))
+                eps_Inf_0 -= random.uniform(0, 0.1)
+            else:
+                d_0 -= random.uniform(0, 1 * 10 ** (-5))
+                Ne_0 -= random.uniform(1 * 10 ** (20), 2 * 10 ** (20))
+                t_0 -= random.uniform(1 * 10 ** (14), 2 * 10 ** (14))
+                eps_Inf_0 -= random.uniform(0, 0.1)
+    return S_T_0, S_R_0, d_0, Ne_0, t_0, eps_Inf_0
+
+
+print(minimization(d_0, Ne_0, t_0, eps_Inf_0, eps2))
 end1 = time.time()
 print(end1 - start1)
