@@ -132,20 +132,20 @@ def mmt(x, Ne, eps_Inf, t, dm):  # x - size w, other parameters membrane
 def minimization(d_0, Ne_0, t_0, eps_Inf_0, eps2):
     iter = 0
     S = mmt(indx2, Ne_0, eps_Inf_0, t_0, d_0) - full_exp
-    S_T_0 = np.std(S[0, :])
-    S_R_0 = np.std(S[1, :])
-    while S_T_0 and S_R_0 > eps2:
+    S_T_0 = np.array([[iter], [np.std(S[0, :])]])
+    S_R_0 = np.array([[iter], [np.std(S[1, :])]])
+    while S_T_0[1] and S_R_0[1]  > eps2:
         iter += 1
-        S_T_0 = np.array([iter-1, np.std(S[0, :])])
-        S_R_0 = np.array([iter-1, np.std(S[1, :])])
+        S_T_0 = np.array([[iter-1], [np.std(S[0, :])]])
+        S_R_0 = np.array([[iter-1], [np.std(S[1, :])]])
         d_0 += random.uniform(0, 100 * 10 ** (-5))
         Ne_0 += random.uniform(1 * 10 ** (20), 10 * 10 ** (20))
         t_0 += random.uniform(1 * 10 ** (14), 10 * 10 ** (14))
         eps_Inf_0 += random.uniform(0, 0.1)
         S = mmt(indx2, Ne_0, eps_Inf_0, t_0, d_0) - full_exp
-        S_T = np.array([iter,np.std(S[0, :])])
-        S_R = np.array([iter,np.std(S[1, :])])
-        print(S_T, S_R,'iter =',iter, 'd ==', d_0, 'Ne ==', Ne_0, 't == ', t_0, 'Eps_Inf ==', eps_Inf_0)
+        S_T = np.array([[iter],[np.std(S[0, :])]])
+        S_R = np.array([[iter],[np.std(S[1, :])]])
+        print(S_T[1], S_R[1],'iter =',iter, 'd ==', d_0, 'Ne ==', Ne_0, 't == ', t_0, 'Eps_Inf ==', eps_Inf_0)
         while S_R[1] - S_R_0[1] < 0 and S_T[1] - S_T_0[1] < 0:
             if abs(S_R[1] - S_R_0[1]) < eps2:
                 d_0 += random.uniform(0, 10 * 100 ** (-5))
