@@ -7,7 +7,6 @@ import numpy as np
 from numpy import *
 import scipy as sp
 from scipy.optimize import curve_fit
-
 # ==========================================================#
 #                     CONSTANT                             #
 # ==========================================================#
@@ -38,9 +37,7 @@ full_exp = np.vstack([T_exp, R_exp])
 d_0 = 400 * 10 ** (-5)  # m # 500*10**(-5)
 Ne_0 = 10 ** (20)  # cm^-3 # 10 ** (21)
 t_0 = 10 ** (14)  # 1/tau # 10*(15)
-eps_Inf_0 = 3  # 5
-
-
+eps_Inf_0 = 3.0  # 5
 # ==========================================================#
 #                     THEORY DRUDE                         #
 # ==========================================================#
@@ -128,7 +125,7 @@ def mmt(x, Ne, eps_Inf, t, dm):  # x - size w, other parameters membrane
 #                  FIND OPTIMAL PARAMETERS                 #
 # ==========================================================#
 
-
+# TODO: find optimal parameters d,Ne,t,eps_Inf
 def minimization(d_0, Ne_0, t_0, eps_Inf_0, eps2):
     iter = 0
     S = mmt(indx2, Ne_0, eps_Inf_0, t_0, d_0) - full_exp
@@ -146,7 +143,7 @@ def minimization(d_0, Ne_0, t_0, eps_Inf_0, eps2):
         S_T = np.array([[iter],[np.std(S[0, :])]])
         S_R = np.array([[iter],[np.std(S[1, :])]])
         print(S_T[1], S_R[1],'iter =',iter, 'd ==', d_0, 'Ne ==', Ne_0, 't == ', t_0, 'Eps_Inf ==', eps_Inf_0)
-        while S_R[1] - S_R_0[1] < 0 and S_T[1] - S_T_0[1] < 0:
+        if S_R[1] - S_R_0[1] < 0 and S_T[1] - S_T_0[1] < 0:
             if abs(S_R[1] - S_R_0[1]) < eps2:
                 d_0 += random.uniform(0, 10 * 100 ** (-5))
                 Ne_0 += random.uniform(10 * 10 ** (20), 20 * 10 ** (20))
