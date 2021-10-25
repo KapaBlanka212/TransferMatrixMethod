@@ -134,7 +134,7 @@ def minimization(d_0, Ne_0, t_0, eps_Inf_0, eps2):
     S = mmt(indx2, Ne_0, eps_Inf_0, t_0, d_0) - full_exp
     S_T_0 = np.array([[iter], [np.std(S[0, :])]])
     S_R_0 = np.array([[iter], [np.std(S[1, :])]])
-    while S_T_0[1] and S_R_0[1]  > eps2:
+    while abs(S_T_0[1]) and abs(S_R_0[1])  > eps2:
         iter += 1
         S_T_0 = np.array([[iter-1], [np.std(S[0, :])]])
         S_R_0 = np.array([[iter-1], [np.std(S[1, :])]])
@@ -157,6 +157,14 @@ def minimization(d_0, Ne_0, t_0, eps_Inf_0, eps2):
                 Ne_0 += random.uniform(1 * 10 ** (20), 2 * 10 ** (20))
                 t_0 += random.uniform(1 * 10 ** (14), 2 * 10 ** (14))
                 eps_Inf_0 += random.uniform(0, 0.1)
+                if d_0 < 0:
+                    d_0 = abs(d_0)
+                if Ne_0 < 0:
+                    Ne_0 = abs(d_0)
+                if t_0 < 0:
+                    t_0 = abs(d_0)
+                if eps_Inf_0 < 0:
+                    eps_Inf_0 = abs(d_0)
         if S_R[1] - S_R_0[1] > 0 and  S_T[1] - S_T_0[1] > 0:
             if  abs(S_R[1] - S_R_0[1]) < eps2:
                 d_0 -= random.uniform(0, 10 * 100 ** (-5))
