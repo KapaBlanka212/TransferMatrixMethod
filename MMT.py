@@ -6,7 +6,7 @@ import MaterialConstant
 import numpy as np
 from numpy import *
 import scipy as sp
-from scipy.optimize import curve_fit
+from scipy.optimize import minimize
 # ==========================================================#
 #                     CONSTANT                             #
 # ==========================================================#
@@ -83,33 +83,37 @@ def fi(w, n_, d):
 #                  CALCULATING T AND R                     #
 # ==========================================================#
 start1 = time.time()
-eps2 = 10 ** (-5)  # available error
+d_f = lambda : d_f
+Ne_f = lambda : Ne_f
+t_f = lambda : t_f
+eps_Inf_f = lambda : eps_Inf_f
+x = np.array([Ne_f,eps_Inf_f,t_f,d_f]).transpose()
+x0 = np.array([Ne_0,eps_Inf_0,t_0,d_0]).transpose()
 
 
-def mmt(x, Ne, eps_Inf, t, dm):  # x - size w, other parameters membrane
+def mmt(x):
+    z = indx2
     Tm = []  # list of T
     Rm = []  # list of R
-    for m in range(0, x):
-        wp = w_p(Ne, eps_Inf)  # omega plasmon
-        eps_ = eps(eps_Inf, wp, t)
+    for m in range(0, z):
+        wp = w_p(x[0], x[1])  # omega plasmon
+        eps_ = eps(x[1], wp, x[2])
         nm = n_m(eps_[m])
         km = k_m(eps_[m])
         D0 = (1 / 2) * (1 / nm) * np.array([[nm + n_vac[m], nm - n_vac[m]],
                                             [nm - n_vac[m], nm + n_vac[m]]])
         # 1
-        P_m = np.array([[np.exp(i * fi(w[m], n_(nm, km), dm)), 0],
-                        [0, np.exp(-i * fi(w[m], n_(nm, km), dm))]])
+        P_m = np.array([[np.exp(i * fi(w[m], n_(nm, km), x[3])), 0],
+                        [0, np.exp(-i * fi(w[m], n_(nm, km),x[3]))]])
         # 1-2
-        D1 = (1 / (2 * n_(n_K108[m], k_K108[m]))) * np.matrix(
-            [[nm + n_(n_K108[m], k_K108[m]), n_(n_K108[m], k_K108[m]) - nm],
-             [n_(n_K108[m], k_K108[m]) - nm, nm + n_(n_K108[m], k_K108[m])]])
+        D1 = (1 / (2 * n_(n_K108[m], k_K108[m]))) * np.matrix([[nm + n_(n_K108[m], k_K108[m]), n_(n_K108[m], k_K108[m]) - nm],
+                                                                [n_(n_K108[m], k_K108[m]) - nm, nm + n_(n_K108[m], k_K108[m])]])
         # 2
         P_K108 = np.array([[np.exp(i * fi(w[m], n_(n_K108[m], k_K108[m]), d_K108)), 0],
                            [0, np.exp(-i * fi(w[m], n_(n_K108[m], k_K108[m]), d_K108))]])
         # 2-3
-        D2 = (1 / (2 * n_vac[m])) * np.array(
-            [[n_vac[m] + n_(n_K108[m], k_K108[m]), n_vac[m] - n_(n_K108[m], k_K108[m])],
-             [(n_vac[m] - n_(n_K108[m], k_K108[m])), n_vac[m] + n_(n_K108[m], k_K108[m])]])
+        D2 = (1 / (2 * n_vac[m])) * np.array([[n_vac[m] + n_(n_K108[m], k_K108[m]), n_vac[m] - n_(n_K108[m], k_K108[m])],
+                                            [(n_vac[m] - n_(n_K108[m], k_K108[m])), n_vac[m] + n_(n_K108[m], k_K108[m])]])
         M = D2 @ P_K108 @ D1 @ P_m @ D0
         T = abs(M[0, 0] - (M[0, 1] * M[1, 0]) / M[1, 1])
         Tm.append(T)
@@ -119,63 +123,22 @@ def mmt(x, Ne, eps_Inf, t, dm):  # x - size w, other parameters membrane
     R1 = np.array(Rm)
     eqn1 = np.vstack([[T1], [R1]])
     return eqn1
-
+    #print (mmt(Ne_0,eps_Inf_0,t_0,d_0))
 
 # ==========================================================#
 #                  FIND OPTIMAL PARAMETERS                 #
-# ==========================================================#
-
+# ==========================================================#w
 # TODO: find optimal parameters d,Ne,t,eps_Inf
-def minimization(d_0, Ne_0, t_0, eps_Inf_0, eps2):
-    iter = 0
-    S = mmt(indx2, Ne_0, eps_Inf_0, t_0, d_0) - full_exp
-    S_T_0 = np.array([[iter], [np.std(S[0, :])]])
-    S_R_0 = np.array([[iter], [np.std(S[1, :])]])
-    while abs(S_T_0[1]) and abs(S_R_0[1])  > eps2:
-        iter += 1
-        S_T_0 = np.array([[iter-1], [np.std(S[0, :])]])
-        S_R_0 = np.array([[iter-1], [np.std(S[1, :])]])
-        d_0 += random.uniform(0, 100 * 10 ** (-5))
-        Ne_0 += random.uniform(1 * 10 ** (20), 10 * 10 ** (20))
-        t_0 += random.uniform(1 * 10 ** (14), 10 * 10 ** (14))
-        eps_Inf_0 += random.uniform(0, 0.1)
-        S = mmt(indx2, Ne_0, eps_Inf_0, t_0, d_0) - full_exp
-        S_T = np.array([[iter],[np.std(S[0, :])]])
-        S_R = np.array([[iter],[np.std(S[1, :])]])
-        print(S_T[1], S_R[1],'iter =',iter, 'd ==', d_0, 'Ne ==', Ne_0, 't == ', t_0, 'Eps_Inf ==', eps_Inf_0)
-        if S_R[1] - S_R_0[1] < 0 and S_T[1] - S_T_0[1] < 0:
-            if abs(S_R[1] - S_R_0[1]) < eps2:
-                d_0 += random.uniform(0, 10 * 100 ** (-5))
-                Ne_0 += random.uniform(10 * 10 ** (20), 20 * 10 ** (20))
-                t_0 += random.uniform(10 * 10 ** (14), 20 * 10 ** (14))
-                eps_Inf_0 += random.uniform(0, 0.1)
-            else:
-                d_0 += random.uniform(0, 1 * 10 ** (-5))
-                Ne_0 += random.uniform(1 * 10 ** (20), 2 * 10 ** (20))
-                t_0 += random.uniform(1 * 10 ** (14), 2 * 10 ** (14))
-                eps_Inf_0 += random.uniform(0, 0.1)
-                if d_0 < 0:
-                    d_0 = abs(d_0)
-                if Ne_0 < 0:
-                    Ne_0 = abs(d_0)
-                if t_0 < 0:
-                    t_0 = abs(d_0)
-                if eps_Inf_0 < 0:
-                    eps_Inf_0 = abs(d_0)
-        if S_R[1] - S_R_0[1] > 0 and  S_T[1] - S_T_0[1] > 0:
-            if  abs(S_R[1] - S_R_0[1]) < eps2:
-                d_0 -= random.uniform(0, 10 * 100 ** (-5))
-                Ne_0 -= random.uniform(10 * 10 ** (20), 20 * 10 ** (20))
-                t_0 -= random.uniform(10 * 10 ** (14), 20 * 10 ** (14))
-                eps_Inf_0 -= random.uniform(0, 0.1)
-            else:
-                d_0 -= random.uniform(0, 1 * 10 ** (-5))
-                Ne_0 -= random.uniform(1 * 10 ** (20), 2 * 10 ** (20))
-                t_0 -= random.uniform(1 * 10 ** (14), 2 * 10 ** (14))
-                eps_Inf_0 -= random.uniform(0, 0.1)
-    return S_T_0, S_R_0, d_0, Ne_0, t_0, eps_Inf_0
 
 
-print(minimization(d_0, Ne_0, t_0, eps_Inf_0, eps2))
+
+def func(x):
+    S = mmt(x) - full_exp
+    S_T_0 = np.std(S[0, :])
+    return S_T_0
+
+bnds = ((Ne_0,10**21),(eps_Inf_0,5),(t_0,10**14),(d_0,500*10**(-5)))
+ans = sp.optimize.minimize(func,x0,method = 'Nelder-Mead',bounds=bnds,options={'disp':True,'return_all': True})
+print(ans)
 end1 = time.time()
 print(end1 - start1)
