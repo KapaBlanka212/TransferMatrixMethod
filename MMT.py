@@ -95,7 +95,7 @@ x = np.array([Ne_f,eps_Inf_f,t_f,d_f]).transpose()
 x0 = np.array([Ne_0,eps_Inf_0,t_0,d_0]).transpose()
 
 
-def mmt(x,delta):
+def mmt(x):
     z = indx2
     Tm = []  # list of T
     Rm = []  # list of R
@@ -113,15 +113,16 @@ def mmt(x,delta):
         D1 = (1 / (2 * n_(n_K108[m], k_K108[m]))) * np.matrix([[nm + n_(n_K108[m], k_K108[m]), n_(n_K108[m], k_K108[m]) - nm],
                                                                 [n_(n_K108[m], k_K108[m]) - nm, nm + n_(n_K108[m], k_K108[m])]])
         # 2
-        P_K108 = np.array([[(np.exp(i * fi_(w[m], n_(n_K108[m], k_K108[m]), d_K108, delta))), 0],
-                            [0, np.exp(-i * fi_(w[m], n_(n_K108[m], k_K108[m]), d_K108, delta))]])
+        P_K108 = np.array([[(lambda delta: np.exp(i * fi_(w[m], n_(n_K108[m], k_K108[m]), d_K108, delta))), 0],
+                            [0,lambda delta: np.exp(-i * fi_(w[m], n_(n_K108[m], k_K108[m]), d_K108, delta))]])
         # 2-3
         D2 = (1 / (2 * n_vac[m])) * np.array([[n_vac[m] + n_(n_K108[m], k_K108[m]), n_vac[m] - n_(n_K108[m], k_K108[m])],
                                             [(n_vac[m] - n_(n_K108[m], k_K108[m])), n_vac[m] + n_(n_K108[m], k_K108[m])]])
-        M = D2 @ P_K108 @ D1 @ P_m @ D0
-        T = (1/(2*pi))*integrate.quad(lambda : delta, abs(M[0, 0] - (M[0, 1] * M[1, 0]) / M[1, 1]) ** (2), 0, 2*pi)
+        M = lambda delta: D2 @ P_K108 @ D1 @ P_m @ D0
+
+        T = (1/(2*pi))*integrate.quad(abs(M[0, 0] - (M[0, 1] * M[1, 0]) / M[1, 1]) ** (2), 0, 2*pi)
         Tm.append(T)
-        R = (1/(2*pi))*integrate.quad(lambda: delta, abs(M[1, 0] / M[1, 1]) ** (2),0, 2*pi)
+        R = (1/(2*pi))*integrate.quad(abs(M[1, 0] / M[1, 1]) ** (2),0, 2*pi)
         Rm.append(R)
     T1 = np.array(Tm)
     R1 = np.array(Rm)
@@ -135,14 +136,14 @@ def mmt(x,delta):
 # TODO: find optimal parameters d,Ne,t,eps_Inf : in progress
 
 
-def func(x,delta):
-    S = mmt(x,delta) - full_exp
+def func(x):
+    S = mmt(x) - full_exp
     S1 = np.std(S)
     return S1
 
-delta = lambda : delta
+
 bnds = ((Ne_0/10,None),(eps_Inf_0/300,None),(t_0/10,None),(d_0/10,None))
-ans = sp.optimize.minimize(func,x0,method = 'Nelder-Mead',args = delta,
+ans = sp.optimize.minimize(func,x0,method = 'Nelder-Mead',
                            bounds=bnds,options={'disp':True,'return_all': True})
 print(ans)
 print(mmt((ans.x)),l*1000)
