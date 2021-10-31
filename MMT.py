@@ -110,25 +110,35 @@ def mmt(x):
         P_m = np.array([[np.exp(i * fi(w[m], n_(nm, km), x[3])), 0],
                         [0, np.exp(-i * fi(w[m], n_(nm, km),x[3]))]])
         # 1-2
-        D1 = (1 / (2 * n_(n_K108[m], k_K108[m]))) * np.matrix([[nm + n_(n_K108[m], k_K108[m]), n_(n_K108[m], k_K108[m]) - nm],
+        D1 = (1 / (2 * n_(n_K108[m], k_K108[m]))) * np.array([[nm + n_(n_K108[m], k_K108[m]), n_(n_K108[m], k_K108[m]) - nm],
                                                                 [n_(n_K108[m], k_K108[m]) - nm, nm + n_(n_K108[m], k_K108[m])]])
         # 2
-        P_K108 = np.array([[(lambda delta: np.exp(i * fi_(w[m], n_(n_K108[m], k_K108[m]), d_K108, delta))), 0],
-                            [0,lambda delta: np.exp(-i * fi_(w[m], n_(n_K108[m], k_K108[m]), d_K108, delta))]])
+        def P_K108(delta):
+            P_K108_out = np.array([[np.exp(i * fi_(w[m], n_(n_K108[m], k_K108[m]), d_K108, delta)), 0],
+                                [0,np.exp(-i * fi_(w[m], n_(n_K108[m], k_K108[m]), d_K108, delta))]])
+            return P_K108_out
         # 2-3
         D2 = (1 / (2 * n_vac[m])) * np.array([[n_vac[m] + n_(n_K108[m], k_K108[m]), n_vac[m] - n_(n_K108[m], k_K108[m])],
                                             [(n_vac[m] - n_(n_K108[m], k_K108[m])), n_vac[m] + n_(n_K108[m], k_K108[m])]])
-        M = lambda delta: D2 @ P_K108 @ D1 @ P_m @ D0
 
-        T = (1/(2*pi))*integrate.quad(abs(M[0, 0] - (M[0, 1] * M[1, 0]) / M[1, 1]) ** (2), 0, 2*pi)
+        def integrate1(delta):
+            M = D2 @ P_K108(delta) @ D1 @ P_m @ D0
+            T_d = abs(M[0, 0] - (M[0, 1] * M[1, 0]) / M[1, 1]) ** (2)
+            return T_d
+        T = integrate.quad(integrate1, 0, 2 * pi)
+        T = (1 / (2 * pi)) * T[0]
         Tm.append(T)
-        R = (1/(2*pi))*integrate.quad(abs(M[1, 0] / M[1, 1]) ** (2),0, 2*pi)
+        def integrate2(delta):
+            M = D2 @ P_K108(delta) @ D1 @ P_m @ D0
+            R_d = abs(M[1, 0] / M[1, 1]) ** (2)
+            return R_d
+        R =  integrate.quad(integrate2, 0, 2 * pi)
+        R =(1 / (2 * pi)) * R[0]
         Rm.append(R)
     T1 = np.array(Tm)
     R1 = np.array(Rm)
     eqn1 = np.vstack([[T1], [R1]])
     return eqn1
-
 
 # ==========================================================#
 #                   FIND OPTIMAL PARAMETERS                 #
@@ -143,8 +153,8 @@ def func(x):
 
 
 bnds = ((Ne_0/10,None),(eps_Inf_0/300,None),(t_0/10,None),(d_0/10,None))
-ans = sp.optimize.minimize(func,x0,method = 'Nelder-Mead',
-                           bounds=bnds,options={'disp':True,'return_all': True})
+ans = sp.optimize.minimize(func,x0,method = 'Nelder-Mead',bounds=bnds,
+                           options={'disp':True,'return_all': True})
 print(ans)
 print(mmt((ans.x)),l*1000)
 #x1 = np.array([1.17055461e+20, 1.30003878e+00, 1.23917067e+14, 4.30471629e-03])
