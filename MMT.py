@@ -120,16 +120,21 @@ def mmt(x):
         # 2-3
         D2 = (1 / (2 * n_vac[m])) * np.array([[n_vac[m] + n_(n_K108[m], k_K108[m]), n_vac[m] - n_(n_K108[m], k_K108[m])],
                                             [(n_vac[m] - n_(n_K108[m], k_K108[m])), n_vac[m] + n_(n_K108[m], k_K108[m])]])
+        def matrix(delta):
+            M_out = D2 @ P_K108(delta) @ D1 @ P_m @ D0
+            return M_out
 
         def integrate1(delta):
-            M = D2 @ P_K108(delta) @ D1 @ P_m @ D0
+            M = matrix(delta)
             T_d = abs(M[0, 0] - (M[0, 1] * M[1, 0]) / M[1, 1]) ** (2)
             return T_d
+
         T = integrate.quad(integrate1, 0, 2 * pi)
         T = (1 / (2 * pi)) * T[0]
         Tm.append(T)
+
         def integrate2(delta):
-            M = D2 @ P_K108(delta) @ D1 @ P_m @ D0
+            M = matrix(delta)
             R_d = abs(M[1, 0] / M[1, 1]) ** (2)
             return R_d
         R =  integrate.quad(integrate2, 0, 2 * pi)
@@ -157,7 +162,5 @@ ans = sp.optimize.minimize(func,x0,method = 'Nelder-Mead',bounds=bnds,
                            options={'disp':True,'return_all': True})
 print(ans)
 print(mmt((ans.x)),l*1000)
-#x1 = np.array([1.17055461e+20, 1.30003878e+00, 1.23917067e+14, 4.30471629e-03])
-#print([[mmt(x)],[l*1000]])
 end1 = time.time()
 print(end1 - start1)
