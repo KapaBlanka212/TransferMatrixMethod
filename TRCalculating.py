@@ -3,7 +3,7 @@ import MaterialConstant
 import numpy as np
 from numpy import *
 import scipy as sp
-from sympy import Symbol
+#from sympy import Symbol
 from scipy.optimize import minimize
 import scipy.integrate as integrate
 # ==========================================================#
@@ -25,7 +25,7 @@ i = 1j  # Im 1
 indx = const.indx
 indx2 = const.indx2
 # ==========================================================#
-#                 EXPERIMENTAL CONSTANT                    #
+#                  EXPERIMENTAL CONSTANT                    #
 # ==========================================================#
 T_exp = const.T_exp
 R_exp = const.R_exp
@@ -38,7 +38,7 @@ Ne_0 = 10 ** (20)  # cm^-3 # 10 ** (21)
 t_0 = 10 ** (14)  # 1/tau # 10*(15)
 eps_Inf_0 = 3.0  # 5
 # ==========================================================#
-#                     THEORY DRUDE                         #
+#                      THEORY DRUDE                         #
 # ==========================================================#
 
 
@@ -63,7 +63,7 @@ def k_m(eps):
 
 
 # ==========================================================#
-#     Complex refractive index and electric potential      #
+#      Complex refractive index and electric potential      #
 # ==========================================================#
 # TODO: realisation MMT for only one point l/w : DONE
 
@@ -84,7 +84,7 @@ def fi_(w, n_, d, delta):
 
 
 # ==========================================================#
-#                  CALCULATING T AND R                     #
+#                   CALCULATING T AND R                     #
 # ==========================================================#
 start1 = time.time()
 d_f = lambda : d_f
@@ -120,31 +120,38 @@ def mmt(x):
         # 2-3
         D2 = (1 / (2 * n_vac[m])) * np.array([[n_vac[m] + n_(n_K108[m], k_K108[m]), n_vac[m] - n_(n_K108[m], k_K108[m])],
                                             [(n_vac[m] - n_(n_K108[m], k_K108[m])), n_vac[m] + n_(n_K108[m], k_K108[m])]])
+
+
         def matrix(delta):
             M_out = D2 @ P_K108(delta) @ D1 @ P_m @ D0
             return M_out
+
 
         def integrate1(delta):
             M = matrix(delta)
             T_d = abs(M[0, 0] - (M[0, 1] * M[1, 0]) / M[1, 1]) ** (2)
             return T_d
 
-        T = integrate.quad(integrate1, 0, 2 * pi)
-        T = (1 / (2 * pi)) * T[0]
+        T1 = integrate.quad(integrate1, 0, 2 * pi)
+        T = (1 / (2 * pi)) * T1[0]
         Tm.append(T)
 
         def integrate2(delta):
             M = matrix(delta)
             R_d = abs(M[1, 0] / M[1, 1]) ** (2)
             return R_d
-        R =  integrate.quad(integrate2, 0, 2 * pi)
-        R =(1 / (2 * pi)) * R[0]
+
+
+        R1 = integrate.quad(integrate2, 0, 2 * pi)
+        R = (1 / (2 * pi)) * R1[0]
         Rm.append(R)
+
     T1 = np.array(Tm)
     R1 = np.array(Rm)
     eqn1 = np.vstack([[T1], [R1]])
     return eqn1
 
+#print(mmt(x0))
 # ==========================================================#
 #                   FIND OPTIMAL PARAMETERS                 #
 # ==========================================================#
@@ -153,14 +160,20 @@ def mmt(x):
 
 def func(x):
     S = mmt(x) - full_exp
-    S1 = np.std(S)
+    S1 = np.std(S[0,:])
     return S1
 
 
-bnds = ((Ne_0/10,None),(eps_Inf_0/300,None),(t_0/10,None),(d_0/10,None))
+bnds = ((Ne_0/10,None),
+        (eps_Inf_0/300,None),
+        (t_0/10,None),
+        (d_0/10,None))
+
 ans = sp.optimize.minimize(func,x0,method = 'Nelder-Mead',bounds=bnds,
-                           options={'disp':True,'return_all': True})
+                        options={'disp':True,'return_all': True, 'maxiter':1200 })
 print(ans)
-print(mmt((ans.x)),l*1000)
+l1 = l * 10 ** 4
+np.savetxt('TR',np.array(mmt(ans.x)).transpose())
+np.savetxt('L',l1)
 end1 = time.time()
 print(end1 - start1)
