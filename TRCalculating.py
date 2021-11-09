@@ -7,7 +7,7 @@ import scipy as sp
 from scipy.optimize import minimize
 import scipy.integrate as integrate
 # ==========================================================#
-#                      CONSTANT                             #
+#                     GLOBAL CONSTANT                       #
 # ==========================================================#
 m0 = 9.1 * 10 ** (-31)  # electron mass kg
 me = 0.35 * m0  # electron mass in thin membrane
@@ -15,25 +15,24 @@ e0 = 1.6 * 10 ** (-19)  # Kulon
 const = MaterialConstant.MaterialConstant()
 c = const.lightspeed * 10 ** (-2)  # cm/c
 d_K108 = const.d_K108  # cm
-l = const.full_wavelenght  # cm
+l = const.short_wavelenght[::10]  # cm
 w = 2 * pi * c / (l)  # sec^(-1)
-n_K108 = const.n_K108  # K108
-k_K108 = (const.alfa_K108) * (l / (4 * pi))  # K108
+n_K108 = const.short_n[::10]
+k_K108 = (const.short_alfa[::10]) * (l / (4 * pi))
 n_vac = const.n_vac  # VACUUM
 k_vac = const.alfa_vac  # 0 == 0
 i = 1j  # Im 1
-indx = const.indx
-indx2 = const.indx2
 # ==========================================================#
 #                  EXPERIMENTAL CONSTANT                    #
 # ==========================================================#
-T_exp = const.T_exp
-R_exp = const.R_exp
+T_exp = const.T6_short
+R_exp = const.R6_short
+indx = R_exp.size
 full_exp = np.vstack([T_exp, R_exp])
 # ==========================================================#
 #           ZERO APPROXIMATION OF PARAMETERS               #
 # ==========================================================#
-d_0 = 400 * 10 ** (-5)  # sm # 500*10**(-5)
+d_0 = 400 * 10 ** (-7)  # sm # 500*10**(-7)
 Ne_0 = 10 ** (20)  # cm^-3 # 10 ** (21)
 t_0 = 10 ** (14)  # 1/tau # 10*(15)
 eps_Inf_0 = 3.0  # 5
@@ -42,13 +41,13 @@ eps_Inf_0 = 3.0  # 5
 # ==========================================================#
 
 
-def eps(eps_inf, w_p, t):  # t = 1/tau
-    eps_return = eps_inf * (1.0 - ((w_p ** (2)) / (w * (w + (i * t)))))
+def eps(eps_inf, wp, t):  # t = 1/tau
+    eps_return = eps_inf * (1.0 - ((wp ** 2) / (w * (w + (i * t)))))
     return eps_return
 
 
-def w_p(Ne, eps_inf):
-    w_p_out = np.sqrt((4 * pi * Ne * e0 ** (2)) / (eps_inf * me))
+def w_p(ne, eps_inf):
+    w_p_out = np.sqrt((4 * pi * ne * e0 ** (2)) / (eps_inf * me))
     return w_p_out
 
 
@@ -65,7 +64,6 @@ def k_m(eps):
 # ==========================================================#
 #      Complex refractive index and electric potential      #
 # ==========================================================#
-# TODO: realisation MMT for only one point l/w : DONE
 
 
 def n_(n, k):
@@ -87,16 +85,18 @@ def fi_(w, n_, d, delta):
 #                   CALCULATING T AND R                     #
 # ==========================================================#
 start1 = time.time()
-d_f = lambda : d_f
-Ne_f = lambda : Ne_f
-t_f = lambda : t_f
-eps_Inf_f = lambda : eps_Inf_f
-x = np.array([Ne_f,eps_Inf_f,t_f,d_f]).transpose()
-x0 = np.array([Ne_0,eps_Inf_0,t_0,d_0]).transpose()
+
+
+def x(ne_f, eps_inf_f, t_f, d_f):
+    x_out = np.array([ne_f,eps_inf_f,t_f,d_f]).transpose()
+    return x_out
+
+
+x0 = np.array([0.5*10**21,4,0.5*10**15,450*10**(-7)]).transpose()
 
 
 def mmt(x):
-    z = indx2
+    z = indx
     Tm = []  # list of T
     Rm = []  # list of R
     for m in range(0, z):
@@ -104,8 +104,8 @@ def mmt(x):
         eps_ = eps(x[1], wp, x[2])
         nm = n_m(eps_[m])
         km = k_m(eps_[m])
-        D0 = (1 / 2) * (1 / nm) * np.array([[nm + n_vac[m], nm - n_vac[m]],
-                                            [nm - n_vac[m], nm + n_vac[m]]])
+        D0 = (1 / 2) * (1 / nm) * np.array([[nm + n_vac, nm - n_vac],
+                                            [nm - n_vac, nm + n_vac]])
         # 1
         P_m = np.array([[np.exp(i * fi(w[m], n_(nm, km), x[3])), 0],
                         [0, np.exp(-i * fi(w[m], n_(nm, km),x[3]))]])
@@ -118,8 +118,8 @@ def mmt(x):
                                 [0,np.exp(-i * fi_(w[m], n_(n_K108[m], k_K108[m]), d_K108, delta))]])
             return P_K108_out
         # 2-3
-        D2 = (1 / (2 * n_vac[m])) * np.array([[n_vac[m] + n_(n_K108[m], k_K108[m]), n_vac[m] - n_(n_K108[m], k_K108[m])],
-                                            [(n_vac[m] - n_(n_K108[m], k_K108[m])), n_vac[m] + n_(n_K108[m], k_K108[m])]])
+        D2 = (1 / (2 * n_vac)) * np.array([[n_vac + n_(n_K108[m], k_K108[m]), n_vac - n_(n_K108[m], k_K108[m])],
+                                            [(n_vac - n_(n_K108[m], k_K108[m])), n_vac + n_(n_K108[m], k_K108[m])]])
 
 
         def matrix(delta):
@@ -127,22 +127,22 @@ def mmt(x):
             return M_out
 
 
-        def integrate1(delta):
+        def integrateT(delta):
             M = matrix(delta)
             T_d = abs(M[0, 0] - (M[0, 1] * M[1, 0]) / M[1, 1]) ** (2)
             return T_d
 
-        T1 = integrate.quad(integrate1, 0, 2 * pi)
+        T1 = integrate.quad(integrateT, 0, 2 * pi)
         T = (1 / (2 * pi)) * T1[0]
         Tm.append(T)
 
-        def integrate2(delta):
+        def integrateR(delta):
             M = matrix(delta)
             R_d = abs(M[1, 0] / M[1, 1]) ** (2)
             return R_d
 
 
-        R1 = integrate.quad(integrate2, 0, 2 * pi)
+        R1 = integrate.quad(integrateR, 0, 2 * pi)
         R = (1 / (2 * pi)) * R1[0]
         Rm.append(R)
 
@@ -151,7 +151,7 @@ def mmt(x):
     eqn1 = np.vstack([[T1], [R1]])
     return eqn1
 
-#print(mmt(x0))
+
 # ==========================================================#
 #                   FIND OPTIMAL PARAMETERS                 #
 # ==========================================================#
@@ -159,21 +159,25 @@ def mmt(x):
 
 
 def func(x):
-    S = mmt(x) - full_exp
-    S1 = np.std(S[0,:])
-    return S1
+    s = mmt(x) - full_exp
+    s1 = np.std(s[0,:])
+    s2 = np.std(s[1,:])
+    fun = s1 + s2
+    return fun
 
 
-bnds = ((Ne_0/10,None),
-        (eps_Inf_0/300,None),
-        (t_0/10,None),
-        (d_0/10,None))
-
+bnds = ((Ne_0,10**21),
+        (eps_Inf_0,5),
+        (t_0,10**15),
+        (d_0,500*10**(-7)))
 ans = sp.optimize.minimize(func,x0,method = 'Nelder-Mead',bounds=bnds,
-                        options={'disp':True,'return_all': True, 'maxiter':1200 })
+                           options={'disp':True,'return_all': None,'xatol': 0.01,
+                                    'fatol': 0.01, 'maxiter':5000,'adaptive': True})
 print(ans)
+x_res = ans.x
+TR = np.array(mmt(x_res)).transpose()
 l1 = l * 10 ** 4
-np.savetxt('TR',np.array(mmt(ans.x)).transpose())
+np.savetxt('TR',TR)
 np.savetxt('L',l1)
 end1 = time.time()
 print(end1 - start1)
