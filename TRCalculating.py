@@ -15,7 +15,8 @@ e0 = 1.6 * 10 ** (-19)  # Kulon
 const = MaterialConstant.MaterialConstant()
 c = const.lightspeed * 10 ** (-2)  # cm/c
 d_K108 = const.d_K108  # cm
-l = const.short_wavelenght[::10]  # cm
+l = const.short_wavelenght * 10**(-4)  # cm
+print(l)
 w = 2 * pi * c / (l)  # sec^(-1)
 n_K108 = const.short_n[::10]
 k_K108 = (const.short_alfa[::10]) * (l / (4 * pi))
@@ -29,19 +30,24 @@ T_exp = const.T6_short
 R_exp = const.R6_short
 indx = R_exp.size
 full_exp = np.vstack([T_exp, R_exp])
+print(full_exp,full_exp.shape)
 # ==========================================================#
 #           ZERO APPROXIMATION OF PARAMETERS               #
 # ==========================================================#
-d_0 = 400 * 10 ** (-7)  # sm # 500*10**(-7)
-Ne_0 = 10 ** (20)  # cm^-3 # 10 ** (21)
-t_0 = 10 ** (14)  # 1/tau # 10*(15)
-eps_Inf_0 = 3.0  # 5
+d_0_left = 400 * 10 ** (-7)  # sm # 500*10**(-7)
+Ne_0_left = 10 ** (20)  # cm^-3 # 10 ** (21)
+t_0_left = 10 ** (14)  # 1/tau # 10*(15)
+eps_inf_0_left = 3.0  # 5
+d_0_right = 500 * 10 ** (-7)  # sm #
+Ne_0_right = 10 ** (21)  # cm^-3 #
+t_0_right = 10**(15)  # 1/tau # 10*(15)
+eps_inf_0_right =  5.0 # 5
 # ==========================================================#
 #                      THEORY DRUDE                         #
 # ==========================================================#
 
 
-def eps(eps_inf, wp, t):  # t = 1/tau
+def eps(eps_inf, wp, t,w):  # t = 1/tau
     eps_return = eps_inf * (1.0 - ((wp ** 2) / (w * (w + (i * t)))))
     return eps_return
 
@@ -101,9 +107,9 @@ def mmt(x):
     Rm = []  # list of R
     for m in range(0, z):
         wp = w_p(x[0], x[1])  # omega plasmon
-        eps_ = eps(x[1], wp, x[2])
-        nm = n_m(eps_[m])
-        km = k_m(eps_[m])
+        eps_ = eps(x[1], wp, x[2],w[m])
+        nm = n_m(eps_)
+        km = k_m(eps_)
         D0 = (1 / 2) * (1 / nm) * np.array([[nm + n_vac, nm - n_vac],
                                             [nm - n_vac, nm + n_vac]])
         # 1
@@ -163,18 +169,20 @@ def func(x):
     s1 = np.std(s[0,:])
     s2 = np.std(s[1,:])
     fun = s1 + s2
+    print(fun)
     return fun
 
 
-bnds = ((Ne_0,10**21),
-        (eps_Inf_0,5),
-        (t_0,10**15),
-        (d_0,500*10**(-7)))
+bnds = ((Ne_0_left,Ne_0_right),
+        (eps_inf_0_left,eps_inf_0_right),
+        (t_0_left,t_0_right),
+        (d_0_left,d_0_right))
+
 ans = sp.optimize.minimize(func,x0,method = 'Nelder-Mead',bounds=bnds,
-                           options={'disp':True,'return_all': None,'xatol': 0.01,
-                                    'fatol': 0.01, 'maxiter':5000,'adaptive': True})
+                           options={'disp':True,'return_all': None,'adaptive': True})
 print(ans)
 x_res = ans.x
+#x_res = np.array([6.02861103e+20, 3.00000000e+00, 5.17937871e+14, 4.84918626e-05])
 TR = np.array(mmt(x_res)).transpose()
 l1 = l * 10 ** 4
 np.savetxt('TR',TR)
