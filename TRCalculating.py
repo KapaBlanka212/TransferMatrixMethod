@@ -6,42 +6,91 @@ import scipy as sp
 #from sympy import Symbol
 from scipy.optimize import minimize
 import scipy.integrate as integrate
+const = MaterialConstant.MaterialConstant()
+# ==========================================================#
+#                      CHOOSING  THIN FILM                  #
+# ==========================================================#
+th = int(input('Введите номер исследуемой тонкой плёнки'))
 # ==========================================================#
 #                     GLOBAL CONSTANT                       #
 # ==========================================================#
-m0 = 9.1 * 10 ** (-31)  # electron mass kg
+# ==========================================================#
+#                     GLOBAL CONSTANT                       #
+# ==========================================================#
+m0 = 9.1 * 10 ** (-28)  # electron mass kg
 me = 0.35 * m0  # electron mass in thin membrane
-e0 = 1.6 * 10 ** (-19)  # Kulon
-const = MaterialConstant.MaterialConstant()
-c = const.lightspeed * 10 ** (-2)  # cm/c
+e0 = 4.8 * 10 ** (-10)  # Kulon
+c = const.lightspeed * 10 ** (2)  # cm/c
 d_K108 = const.d_K108  # cm
-l = const.short_wavelenght * 10**(-4)  # cm
-print(l)
+l = const.full_wavelength * 10**(-4)  # cm
 w = 2 * pi * c / (l)  # sec^(-1)
-n_K108 = const.short_n[::10]
-k_K108 = (const.short_alfa[::10]) * (l / (4 * pi))
+n_K108 = const.n_K108
+k_K108 = (const.alfa_K108) * (l / (4 * pi))
 n_vac = const.n_vac  # VACUUM
 k_vac = const.alfa_vac  # 0 == 0
 i = 1j  # Im 1
 # ==========================================================#
 #                  EXPERIMENTAL CONSTANT                    #
 # ==========================================================#
-T_exp = const.T6_short
-R_exp = const.R6_short
-indx = R_exp.size
-full_exp = np.vstack([T_exp, R_exp])
-print(full_exp,full_exp.shape)
+#T_exp_2000 = 4*10**(-4)
+#R_exp_2000 = 0.95
+#n_th_w = 2.5
+#k_th_w = 2.49*0.2/(4*pi)
+#alfa = 1
+#beta = 1
+gamma = 1
+#w_l = 0.2 # sm
+# for short wavelength only #
+#T_exp = const.T6_short
+#R_exp = const.R6_short
+#indx = R_exp.size
+#full_exp = np.vstack([T_exp, R_exp])
+#print(full_exp,full_exp.shape)
+# full wavelength
+if th == 6:
+    T_exp = const.T_exp_6
+    R_exp = const.R_exp_6
+    indx = R_exp.size
+    full_exp = np.vstack([T_exp, R_exp])
+elif th == 5:
+    T_exp = const.T_exp_5
+    R_exp = const.R_exp_5
+    indx = R_exp.size
+    full_exp = np.vstack([T_exp, R_exp])
+elif th == 4:
+    T_exp = const.T_exp_4
+    R_exp = const.R_exp_4
+    indx = R_exp.size
+    full_exp = np.vstack([T_exp, R_exp])
+elif th == 3:
+    T_exp = const.T_exp_3
+    R_exp = const.R_exp_3
+    indx = R_exp.size
+    full_exp = np.vstack([T_exp, R_exp])
+elif th == 2:
+    T_exp = const.T_exp_2
+    R_exp = const.R_exp_2
+    indx = R_exp.size
+    full_exp = np.vstack([T_exp, R_exp])
+elif th == 1:
+    T_exp = const.T_exp_1
+    R_exp = const.R_exp_1
+    indx = R_exp.size
+    full_exp = np.vstack([T_exp, R_exp])
+
 # ==========================================================#
 #           ZERO APPROXIMATION OF PARAMETERS               #
 # ==========================================================#
-d_0_left = 400 * 10 ** (-7)  # sm # 500*10**(-7)
-Ne_0_left = 10 ** (20)  # cm^-3 # 10 ** (21)
-t_0_left = 10 ** (14)  # 1/tau # 10*(15)
-eps_inf_0_left = 3.0  # 5
-d_0_right = 500 * 10 ** (-7)  # sm #
-Ne_0_right = 10 ** (21)  # cm^-3 #
-t_0_right = 10**(15)  # 1/tau # 10*(15)
-eps_inf_0_right =  5.0 # 5
+d_0_left = 400 * 10 ** (-7)  # cm
+d_0_right = 500 * 10 ** (-7)  # cm
+Ne_0_left = 10 ** (19)  # cm^-3
+Ne_0_right = 10 ** (21)  # cm^-3
+t_0_left = 10 ** (13)  # 1/tau
+t_0_right = 10**(15)  # 1/tau
+eps_inf_0_left = 3.0
+eps_inf_0_right =  5.0
+
+
 # ==========================================================#
 #                      THEORY DRUDE                         #
 # ==========================================================#
@@ -93,12 +142,15 @@ def fi_(w, n_, d, delta):
 start1 = time.time()
 
 
-def x(ne_f, eps_inf_f, t_f, d_f):
-    x_out = np.array([ne_f,eps_inf_f,t_f,d_f]).transpose()
+def x(ne_f,eps_inf, t_f, d_f):
+    x_out = np.array([ne_f,eps_inf,t_f,d_f]).transpose()
     return x_out
 
 
-x0 = np.array([0.5*10**21,4,0.5*10**15,450*10**(-7)]).transpose()
+x0 = np.array([7*10**(20),
+               3.9,
+               5*10**(13),
+               400*10**(-7)]).transpose()
 
 
 def mmt(x):
@@ -138,8 +190,8 @@ def mmt(x):
             T_d = abs(M[0, 0] - (M[0, 1] * M[1, 0]) / M[1, 1]) ** (2)
             return T_d
 
-        T1 = integrate.quad(integrateT, 0, 2 * pi)
-        T = (1 / (2 * pi)) * T1[0]
+        T2 = integrate.quad(integrateT, 0, 2 * pi)
+        T = (1 / (2 * pi)) * T2[0]
         Tm.append(T)
 
         def integrateR(delta):
@@ -148,15 +200,64 @@ def mmt(x):
             return R_d
 
 
-        R1 = integrate.quad(integrateR, 0, 2 * pi)
-        R = (1 / (2 * pi)) * R1[0]
+        R2 = integrate.quad(integrateR, 0, 2 * pi)
+        R = (1 / (2 * pi)) * R2[0]
         Rm.append(R)
-
     T1 = np.array(Tm)
     R1 = np.array(Rm)
     eqn1 = np.vstack([[T1], [R1]])
     return eqn1
 
+
+#def mmt_long(x):
+#    wp = w_p(x[0], x[1])  # omega plasmon
+#    eps_ = eps(x[1], wp, x[2],w_l)
+#    nm = n_m(eps_)
+#    km = k_m(eps_)
+#    D0 = (1 / 2) * (1 / nm) * np.array([[nm + n_vac, nm - n_vac],
+#                                       [nm - n_vac, nm + n_vac]])
+#    # 1
+#   P_m = np.array([[np.exp(i * fi(w_l, n_(nm, km), x[3])), 0],
+#                    [0, np.exp(-i * fi(w_l, n_(nm, km),x[3]))]])
+#    # 1-2
+#    D1 = (1 / (2 * n_(n_th_w, k_th_w))) * np.array([[nm + n_(n_th_w, k_th_w), n_(n_th_w, k_th_w - nm)],
+#                                                    [n_(n_th_w, k_th_w) - nm, nm + n_(n_th_w, k_th_w)]])
+#    # 2
+#
+#
+#    def P_K108(delta):
+#       P_K108_out = np.array([[np.exp(i * fi_(w_l, n_(n_th_w, k_th_w), d_K108, delta)), 0],
+#                            [0,np.exp(-i * fi_(w_l, n_(n_th_w, k_th_w), d_K108, delta))]])
+#       return P_K108_out
+#
+#
+#    # 2-3
+#    D2 = (1 / (2 * n_vac)) * np.array([[n_vac + n_(n_th_w, k_th_w), n_vac - n_(n_th_w, k_th_w)],
+#                                       [(n_vac - n_(n_th_w, k_th_w)), n_vac + n_(n_th_w, k_th_w)]])
+#
+#    def matrix(delta):
+#        M_out = D2 @ P_K108(delta) @ D1 @ P_m @ D0
+#        return M_out
+#
+#
+#    def integrateT(delta):
+#        M = matrix(delta)
+#        T_d = abs(M[0, 0] - (M[0, 1] * M[1, 0]) / M[1, 1]) ** (2)
+#        return T_d
+#
+#    T1 = integrate.quad(integrateT, 0, 2 * pi)
+#    T = (1 / (2 * pi)) * T1[0]
+#
+#    def integrateR(delta):
+#          M = matrix(delta)
+#          R_d = abs(M[1, 0] / M[1, 1]) ** (2)
+#          return R_d
+#
+#
+#   R1 = integrate.quad(integrateR, 0, 2 * pi)
+#    R = (1 / (2 * pi)) * R1[0]
+#    eqn1 = np.vstack([[T], [R]])
+#    return eqn1
 
 # ==========================================================#
 #                   FIND OPTIMAL PARAMETERS                 #
@@ -165,10 +266,17 @@ def mmt(x):
 
 
 def func(x):
+#    th = mmt_long(x)
+#    R_th_2000 = th[1,:]
+#    T_th_2000 = th[0,:]
     s = mmt(x) - full_exp
-    s1 = np.std(s[0,:])
-    s2 = np.std(s[1,:])
-    fun = s1 + s2
+    s1 = s[0,:]
+    s2 = s[1,:]
+    sum1 = np.sum(s1)
+    sum2 = np.sum(s2)
+    s1_s = sum1/indx
+    s2_s = sum2/indx
+    fun = gamma*np.sqrt((1/indx)*(np.sum((s1-s1_s)**2)+np.sum((s2-s2_s)**2)))#+alfa*(abs(R_exp_2000-R_th_2000)/R_exp_2000)+beta*(abs(T_exp_2000-T_th_2000)/T_exp_2000)
     print(fun)
     return fun
 
@@ -178,11 +286,10 @@ bnds = ((Ne_0_left,Ne_0_right),
         (t_0_left,t_0_right),
         (d_0_left,d_0_right))
 
-ans = sp.optimize.minimize(func,x0,method = 'Nelder-Mead',bounds=bnds,
-                           options={'disp':True,'return_all': None,'adaptive': True})
+ans = sp.optimize.minimize(func,x0,method = 'Nelder-Mead',bounds=bnds,tol = 0.1,
+                           options={'disp':True,'return_all': None,'adaptive': True,'maxiter':None})
 print(ans)
 x_res = ans.x
-#x_res = np.array([6.02861103e+20, 3.00000000e+00, 5.17937871e+14, 4.84918626e-05])
 TR = np.array(mmt(x_res)).transpose()
 l1 = l * 10 ** 4
 np.savetxt('TR',TR)
