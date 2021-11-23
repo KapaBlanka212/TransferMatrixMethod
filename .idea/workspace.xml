@@ -5,22 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d89ebead-bab4-47b5-876a-05136f96fdaf" name="Changes" comment="TODO: realisation MMT for only one point l/w : DONE">
-      <change afterPath="$PROJECT_DIR$/ConstantNPY/R6_long.npy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ConstantNPY/T1_long.npy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ConstantNPY/T1_short.npy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ConstantNPY/T2_long.npy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ConstantNPY/T2_short.npy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ConstantNPY/T3_long.npy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ConstantNPY/T3_short.npy" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/ConstantNPY/T4_long.npy" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/FunctionPlot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantMAT/Material4.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantMAT/Material6.mat" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantMAT/Material6.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantNPY/R4_short.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantMAT/M6_long.mat" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantMAT/M6_long.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantMAT/Material6.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/R1_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/R1_short.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/R2_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/R2_short.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/R3_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/R3_short.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/R4_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/R4_short.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/R5_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/R5_short.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/T1_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/T1_short.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/T2_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/T2_short.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/T3_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/T3_short.npy" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ConstantNPY/T4_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/T4_short.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/T5_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/T5_short.npy" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/MaterialConstant.py" beforeDir="false" afterPath="$PROJECT_DIR$/MaterialConstant.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/SD.py" beforeDir="false" afterPath="$PROJECT_DIR$/SD.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TR" beforeDir="false" afterPath="$PROJECT_DIR$/TR" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TR" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TRCalculating.py" beforeDir="false" afterPath="$PROJECT_DIR$/TRCalculating.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -72,6 +73,27 @@
     <option name="enabled" value="false" />
   </component>
   <component name="RunManager" selected="Python.TRCalculating">
+    <configuration name="FunctionPlot" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\Nikita\PycharmProjects\TransferMatrixMethod\venv\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/FunctionPlot.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="SD" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -118,6 +140,7 @@
       <list>
         <item itemvalue="Python.TRCalculating" />
         <item itemvalue="Python.SD" />
+        <item itemvalue="Python.FunctionPlot" />
       </list>
     </recent_temporary>
   </component>
