@@ -5,24 +5,33 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d89ebead-bab4-47b5-876a-05136f96fdaf" name="Changes" comment="TODO: realisation MMT for only one point l/w : DONE">
-      <change afterPath="$PROJECT_DIR$/FunctionPlot.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantMAT/M6_long.mat" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantMAT/M6_long.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantMAT/Material6.mat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantNPY/R1_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/R1_short.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantNPY/R2_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/R2_short.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantNPY/R3_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/R3_short.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantNPY/R4_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/R4_short.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantNPY/R5_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/R5_short.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantNPY/T1_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/T1_short.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantNPY/T2_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/T2_short.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantNPY/T3_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/T3_short.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantNPY/T4_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/T4_short.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantNPY/T5_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/T5_short.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantMAT/K108.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/R6_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/R6_short.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/R_K108_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/R_K108_short.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/T6_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/T6_short.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/T_K108_long.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/T_K108_long.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/T_K108_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/T_K108_short.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/wl.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/wl.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/L" beforeDir="false" afterPath="$PROJECT_DIR$/L" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/L.npy" beforeDir="false" afterPath="$PROJECT_DIR$/L.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Long.m" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/MaterialConstant.py" beforeDir="false" afterPath="$PROJECT_DIR$/MaterialConstant.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NKRootFinding.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/SD.py" beforeDir="false" afterPath="$PROJECT_DIR$/SD.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TR" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Short.m" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TR6" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TR6.npy" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TRCalculating.py" beforeDir="false" afterPath="$PROJECT_DIR$/TRCalculating.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TR_exp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/full_wavelength" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/priverka" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/res.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/result/ TR6" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/result/ TR6.npy" beforeDir="false" afterPath="$PROJECT_DIR$/result/ TR6.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/result/ res" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/result/ res.npy" beforeDir="false" afterPath="$PROJECT_DIR$/result/ res.npy" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,7 +82,28 @@
     <option name="enabled" value="false" />
   </component>
   <component name="RunManager" selected="Python.TRCalculating">
-    <configuration name="FunctionPlot" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="Anderson model" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\Nikita\PycharmProjects\TransferMatrixMethod\venv\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/../MyPythonProject/For_Study" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../MyPythonProject/For_Study/Anderson model.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="MaterialConstant" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
@@ -85,7 +115,28 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/FunctionPlot.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MaterialConstant.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="NKrootfinding" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\Nikita\PycharmProjects\TransferMatrixMethod\venv\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/NKrootfinding.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -140,7 +191,9 @@
       <list>
         <item itemvalue="Python.TRCalculating" />
         <item itemvalue="Python.SD" />
-        <item itemvalue="Python.FunctionPlot" />
+        <item itemvalue="Python.Anderson model" />
+        <item itemvalue="Python.NKrootfinding" />
+        <item itemvalue="Python.MaterialConstant" />
       </list>
     </recent_temporary>
   </component>
@@ -190,5 +243,71 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="TODO: realisation MMT for only one point l/w : DONE" />
     <option name="LAST_COMMIT_MESSAGE" value="TODO: realisation MMT for only one point l/w : DONE" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/TRCalculating.py</url>
+          <line>176</line>
+          <option name="timeStamp" value="56" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/TRCalculating.py</url>
+          <line>177</line>
+          <option name="timeStamp" value="57" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/TRCalculating.py</url>
+          <line>178</line>
+          <option name="timeStamp" value="58" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/TRCalculating.py</url>
+          <line>179</line>
+          <option name="timeStamp" value="59" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/TRCalculating.py</url>
+          <line>180</line>
+          <option name="timeStamp" value="60" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/TRCalculating.py</url>
+          <line>181</line>
+          <option name="timeStamp" value="61" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/TRCalculating.py</url>
+          <line>183</line>
+          <option name="timeStamp" value="62" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/TRCalculating.py</url>
+          <line>185</line>
+          <option name="timeStamp" value="63" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/TRCalculating.py</url>
+          <line>187</line>
+          <option name="timeStamp" value="64" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/TRCalculating.py</url>
+          <line>189</line>
+          <option name="timeStamp" value="65" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/TRCalculating.py</url>
+          <line>191</line>
+          <option name="timeStamp" value="66" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/TRCalculating.py</url>
+          <line>193</line>
+          <option name="timeStamp" value="67" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
