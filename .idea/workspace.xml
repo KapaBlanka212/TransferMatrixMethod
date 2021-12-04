@@ -5,7 +5,6 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d89ebead-bab4-47b5-876a-05136f96fdaf" name="Changes" comment="TODO: realisation MMT for only one point l/w : DONE">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ConstantMAT/K108.mat" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/ConstantNPY/R6_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/R6_short.npy" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/ConstantNPY/R_K108_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/R_K108_short.npy" afterDir="false" />
@@ -16,7 +15,6 @@
       <change beforePath="$PROJECT_DIR$/L" beforeDir="false" afterPath="$PROJECT_DIR$/L" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/L.npy" beforeDir="false" afterPath="$PROJECT_DIR$/L.npy" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Long.m" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/MaterialConstant.py" beforeDir="false" afterPath="$PROJECT_DIR$/MaterialConstant.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/NKRootFinding.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/SD.py" beforeDir="false" afterPath="$PROJECT_DIR$/SD.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Short.m" beforeDir="false" />
@@ -28,10 +26,7 @@
       <change beforePath="$PROJECT_DIR$/priverka" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/res" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/res.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/ TR6" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/result/ TR6.npy" beforeDir="false" afterPath="$PROJECT_DIR$/result/ TR6.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/ res" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/ res.npy" beforeDir="false" afterPath="$PROJECT_DIR$/result/ res.npy" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -81,7 +76,7 @@
   <component name="ReaderModeSettings">
     <option name="enabled" value="false" />
   </component>
-  <component name="RunManager" selected="Python.TRCalculating">
+  <component name="RunManager" selected="Python.NKrootfinding">
     <configuration name="Anderson model" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -189,10 +184,10 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.NKrootfinding" />
         <item itemvalue="Python.TRCalculating" />
         <item itemvalue="Python.SD" />
         <item itemvalue="Python.Anderson model" />
-        <item itemvalue="Python.NKrootfinding" />
         <item itemvalue="Python.MaterialConstant" />
       </list>
     </recent_temporary>
