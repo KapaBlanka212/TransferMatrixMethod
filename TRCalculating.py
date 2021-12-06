@@ -17,6 +17,7 @@ me = 0.35 * m0  # electron mass in thin film
 e0 = 4.8 * 10 ** (-10)  #
 c = const.lightspeed  # cm/s
 l = const.short_wavelenght * 10 ** (-4)  # cm
+print(l)
 l_full = const.full_wavelength * 10 ** (-4) # cm
 w = 2 * pi * c / (l)  # sec^(-1)
 w_l = 2 * pi * c / 0.2 # 1/s
@@ -96,33 +97,6 @@ elif th == 1:
     print(full_exp)
     TR_exp_2000(0.016, 0.78)
     indx = TR_exp_short(const.T1_short, const.R1_short)[1]  # need for mmt(x)
-#print(l)
-#print(w)
-
-
-# ==========================================================#
-#                      THEORY DRUDE                         #
-# ==========================================================#
-
-
-def eps(eps_inf, wp, t, w):  # t = 1/tau
-    eps_return = eps_inf * (1.0 - ((wp ** 2) / (w * (w + i * t))))
-    return eps_return
-
-
-def w_p(ne, eps_inf):
-    w_p_out = np.sqrt((4 * pi * ne * e0 ** (2)) / (eps_inf * me))
-    return w_p_out
-
-
-def n_m(eps):
-    n_m_return = (1/np.sqrt(2)) * np.sqrt(np.sqrt((np.real(eps)) ** 2 + (np.imag(eps)) ** 2) + np.real(eps))
-    return n_m_return
-
-
-def k_m(eps):
-    k_m_return = (1/np.sqrt(2)) * np.sqrt(np.sqrt((np.real(eps)) ** 2 + (np.imag(eps)) ** 2) - np.real(eps))
-    return k_m_return
 
 
 # ==========================================================#
@@ -144,14 +118,43 @@ def fi_(w, n_, d, delta):
     fi_out = (w / c) * n_ * d + delta/2
     return fi_out
 
+# ==========================================================#
+#                      THEORY DRUDE                         #
+# ==========================================================#
+
+
+def eps(eps_inf, wp, t, w):  # t = 1/tau
+    wp2 = wp ** 2
+    w_ = w*(w+i*t)
+    eps_return = eps_inf * (1.0 - wp2 / w_)
+    return eps_return
+
+
+def w_p(ne, eps_inf):
+    w_p_out = np.sqrt((4 * pi * ne * e0 ** (2)) / (eps_inf * me))
+    return w_p_out
+
+
+def n_m(eps):
+#    n_m_out = (1/np.sqrt(2)) * np.sqrt(np.sqrt((np.real(eps)) ** 2 + (np.imag(eps)) ** 2) + np.real(eps))
+    n_m_out = np.real(np.sqrt(eps))
+    return n_m_out
+
+
+def k_m(eps):
+#    k_m_out = (1/np.sqrt(2)) * np.sqrt(np.sqrt((np.real(eps)) ** 2 + (np.imag(eps)) ** 2) - np.real(eps))
+    k_m_out = np.imag(np.sqrt(eps))
+    return k_m_out
+
 
 # ==========================================================#
 #                   CALCULATING T AND R                     #
 # ==========================================================#
 start1 = time.time()
+
 def P(fi):
     P_out = np.array([[np.exp(i * fi), 0],
-                      [0, np.exp(-i * fi)]],dtype = object)
+                      [0, np.exp(-i * fi)]], dtype = object)
     return P_out
 
 def D(n1,n2):
@@ -172,51 +175,57 @@ z = indx
 
 
 def mmt_short(x):
+#    M = [] # list transfer matrix
     Tm = []  # list of T
     Rm = []  # list of R
-    for m in range(0,10, z):
-        wp = w_p(x[0], x[1])  # omega plasmon
-        eps_ = eps(x[1], wp, x[2], w)
-        nm = n_m(eps_)
-        km = k_m(eps_)
-        def matrix(delta):
+    a = 10
+    wp = w_p(x[0], x[1])  # omega plasmon
+    eps_ = eps(x[1], wp, x[2], w)
+    nm = n_m(eps_)
+    print('преломление плёнки',nm)
+    km = k_m(eps_)
+    for m in range(0, z):
+        def matrix(n):
+            delta = np.linspace(0, 2 * pi, n)
             # 0/1
-            D0 = D(n_vac,nm[m])
+            D1 = D(n_vac,nm[m])
             # 1
-            Pm = P(fi(w[m],n_(nm[m], km[m]), x[3]))
+            P1 = P(fi(w[m],n_(nm[m], km[m]), x[3]))
             # 1/2
-            D1 = D(nm[m],n_(n_K108[m], k_K108[m]))
+            D2 = D(nm[m],n_(n_K108[m], k_K108[m]))
             # 2
-            P_K108 = P(fi_(w[m], n_(n_K108[m], k_K108[m]), d_K108, delta))
+            P2 = P(fi_(w[m], n_(n_K108[m], k_K108[m]), d_K108, delta))
             # 2/3
-            D2 = D(n_(n_K108[m], k_K108[m]),n_vac)
+            D3 = D(n_(n_K108[m], k_K108[m]),n_vac)
             # transfer matrix
-            M_out = D2 @ P_K108 @ D1 @ Pm @ D0
-            return M_out
+            M = D3 @ P2 @ D2 @ P1 @ D1
+            return M
+        #start = time.time()
+        M1 = matrix(a)
+        M2 = matrix(a*2)
+        T_ = (abs(M2[0, 0] - ((M2[0, 1] * M2[1, 0]) / M2[1, 1]))) ** (2)
+        R_ = (abs(M2[1, 0] / M2[1, 1])) ** (2)
+        T = (abs(M1[0, 0] - ((M1[0, 1] * M1[1, 0]) / M1[1, 1]))) ** (2)
+        R = (abs(M1[1, 0] / M1[1, 1])) ** (2)
+        delta1 = np.linspace(0, 2 * pi, a)
+        delta2 = np.linspace(0, 2 * pi, 2*a)
+        t_ = integrate.simpson(T_, delta2) * (1 / (2 * pi))
+        r_ = integrate.simpson(R_, delta2) * (1 / (2 * pi))
+        t = integrate.simpson(T, delta1) * (1 / (2 * pi))
+        r = integrate.simpson(R, delta1) * (1 / (2 * pi))
+        err = abs(r - r_) / (abs(r_))
+        if err > 10 ** (-5):
+            a = 2*a
+        #end = time.time()
+        #tim = end - start
+        Rm.append(r_)
 
-        def integrateT(delta):
-            M = matrix(delta)
-            T_d = (abs(M[0, 0] - ((M[0, 1] * M[1, 0]) / M[1, 1]))) ** (2)
-            return T_d
-
-
-        def integrateR(delta):
-            M = matrix(delta)
-            R_d = (abs(M[1, 0] / M[1, 1])) ** (2)
-            return R_d
-
-
-        T2 = integrate.quad(integrateT, 0, 2 * pi)
-        T = (1 / (2 * pi)) * T2[0]
-        Tm.append(T)
-
-        R2 = integrate.quad(integrateR, 0, 2 * pi)
-        R = (1 / (2 * pi)) * R2[0]
-        Rm.append(R)
-
+        Tm.append(t_)
+    #print(tim)
     T1 = np.array(Tm)
     R1 = np.array(Rm)
-    eqn1 = np.vstack([[T1], [R1]])
+    eqn1 = np.vstack((T1, R1))
+    #print(eqn1)
     return eqn1
 
 
@@ -225,29 +234,29 @@ def mmt_2000(x):
     eps_ = eps(x[1], wp, x[2], 0.2)
     nm = n_m(eps_)
     km = k_m(eps_)
-    def matrix(delta):
+    def matrix(delta1):
         # 0/1
-        D0 = D(n_vac,nm)
+        D1 = D(n_vac,nm)
         # 1
-        Pm = P(fi(0.2,n_(nm, km), x[3]))
+        P1 = P(fi(0.2,n_(nm, km), x[3]))
         # 1/2
-        D1 = D(nm,n_(n_th_w, k_th_w))
+        D2 = D(nm,n_(n_th_w, k_th_w))
         # 2
-        P_K108 = P(fi_(0.2, n_(n_th_w, k_th_w), d_K108, delta))
+        P2 = P(fi_(0.2, n_(n_th_w, k_th_w), d_K108, delta1))
         # 2/3
-        D2 = D(n_(n_th_w, k_th_w),n_vac)
+        D3 = D(n_(n_th_w, k_th_w),n_vac)
         # transfer matrix
-        M_out = D2 @ P_K108 @ D1 @ Pm @ D0
+        M_out = D3 @ P2 @ D2 @ P1 @ D1
         return M_out
 
 
-    def integrateT(delta):
-        M = matrix(delta)
+    def integrateT(delta1):
+        M = matrix(delta1)
         T_d = (abs(M[0, 0] - ((M[0, 1] * M[1, 0]) / M[1, 1]))) ** (2)
         return T_d
 
-    def integrateR(delta):
-        M = matrix(delta)
+    def integrateR(delta1):
+        M = matrix(delta1)
         R_d = (abs(M[1, 0] / M[1, 1])) ** (2)
         return R_d
 
@@ -255,68 +264,8 @@ def mmt_2000(x):
     T = (1 / (2 * pi)) * T2[0]
     R2 = integrate.quad(integrateR, 0, 2 * pi)
     R = (1 / (2 * pi)) * R2[0]
-    eqn1 = np.array([[T], [R]])
+    eqn1 = np.vstack((T, R))
     return eqn1
-
-
-#def mmt_full(x):
-#    Tm = []  # list of T
-#    Rm = []  # list of R
-##    for m in range(0, z):
-#        def matrix(delta):
-#            wp = w_p(x[0], x[1])  # omega plasmon
-#            eps_ = eps(x[1], wp, x[2], w_full[m])
-#            nm = n_m(eps_)
-#            #print('n = ',nm,'w =',w[m])
-#            km = k_m(eps_)
-#            #print('k = ', km, 'w =', w[m])
-#            D0 = (1 /( 2*nm )) * np.array([[nm + n_vac, nm - n_vac],
-#                                           [nm - n_vac, nm + n_vac]])
-#            # 1
-#            P_m = np.array([[np.exp(i * fi(w_full[m], n_(nm, km), x[3])), 0],
-#                            [0, np.exp(-i * fi(w_full[m], n_(nm, km), x[3]))]])
-#            # 1-2
-#            D1 = (1 / (2 * n_(n_K108_full[m], k_K108_full[m]))) * np.array(
-#                [[nm + n_(n_K108_full[m], k_K108_full[m]), n_(n_K108_full[m], k_K108_full[m]) - nm],
-#                 [n_(n_K108_full[m], k_K108_full[m]) - nm, nm + n_(n_K108_full[m], k_K108_full[m])]])#
-#
-#            # 2
-#            P_K108 = np.array([[np.exp(i * fi_(w_full[m], n_(n_K108_full[m], k_K108_full[m]), d_K108, delta)), 0],
-#                                   [0, np.exp(-i * fi_(w_full[m], n_(n_K108_full[m], k_K108_full[m]), d_K108, delta))]])
-#
-#
-#           # 2-3
-#          D2 = (1 / (2 * n_vac)) * np.array([
-#                [n_vac + n_(n_K108_full[m], k_K108_full[m]), n_vac - n_(n_K108_full[m], k_K108_full[m])],
-#                [(n_vac - n_(n_K108_full[m], k_K108_full[m])), n_vac + n_(n_K108_full[m], k_K108_full[m])]])
-#
-#            M_out = D2 @ P_K108 @ D1 @ P_m @ D0
-#            return M_out
-#
-#        def integrateR(delta):
-#            M = matrix(delta)
-#            R_d = (abs(M[1, 0] / M[1, 1])) ** (2)
-#            return R_d
-#
-#        def integrateT(delta):
-#            M = matrix(delta)
-#            T_d = (abs(M[0, 0] - (M[0, 1] * M[1, 0]) / M[1, 1]))** (2)
-#            return T_d
-#
-#
-#       T2 = integrate.fixed_quad(integrateT, 0, 2 * pi)
-#        T = (1 / (2 * pi)) * T2[0]
-#
-#        Tm.append(T)
-#
-#        R2 = integrate.fixed_quad(integrateR, 0, 2 * pi)
-#        R = (1 / (2 * pi)) * R2[0]
-#
-#        Rm.append(R)
-#    T1 = np.array(Tm)
-#    R1 = np.array(Rm)
-#    eqn1 = np.vstack([[T1], [R1]])
-#    return eqn1
 
 
 # ==========================================================#
@@ -383,9 +332,9 @@ beta = 1
 gamma = 1
 
 def func(x): # target function
-    r = mmt_2000(x)
-    R_th_2000 = r[1,:]
-    T_th_2000 = r[0,:]
+    #r = mmt_2000(x)
+    #R_th_2000 = r[1,:]
+    #T_th_2000 = r[0,:]
     s = mmt_short(x) - full_exp
     s1 = s[0,:]
     s2 = s[1,:]
@@ -393,18 +342,18 @@ def func(x): # target function
     sum2 = np.sum(s2)
     s1_s = sum1/indx
     s2_s = sum2/indx
-    fun = gamma*np.sqrt((1/indx)*(np.sum((s1-s1_s)**2)+np.sum((s2-s2_s)**2)))+\
-          alfa*(abs(R_exp_2000-R_th_2000)/R_exp_2000)+beta*(abs(T_exp_2000-T_th_2000)/T_exp_2000)
+    fun = gamma * np.sqrt((1/indx) * (np.sum((s1 - s1_s) ** 2) + np.sum((s2 - s2_s) ** 2)))# + \
+          #alfa * (abs(R_exp_2000 - R_th_2000) / R_exp_2000) + beta * (abs(T_exp_2000 - T_th_2000) / T_exp_2000)
     print(fun,x)
     return fun
 
 
 
 # zero approximation
-x0 = np.array([9.0e+20,
-               3.67,
-               6.0e+13,
-               4.600e-05]).transpose()
+x0 = np.array([1.0e+21,
+               3.91,
+               1.0e+14,
+               4.200e-05]).transpose()
 # bound for Nelder-Mead method
 
 
