@@ -172,11 +172,9 @@ def D(n1,n2):
                           [n2 - n1, n1 + n2]])
     return D_out
 
-def x(ne_f, eps_inf_f, t_f, d_f):
+def x(ne_f,t_f):
     x_out = np.array([ne_f, # concentration
-                      4.15, # high frequency dielectric constant
-                      t_f, # electron relaxation time
-                      4.22e-05]) # film thickness
+                      t_f]) # electron relaxation time
     return x_out
 
 
@@ -193,8 +191,8 @@ def mmt_short(x):
     Tm = []  # list of T
     Rm = []  # list of R
     a = 10
-    wp = w_p(x[0], x[1])  # omega plasmon
-    eps_ = eps(x[1], wp, x[2], w)
+    wp = w_p(x[0], 4.06)  # omega plasmon
+    eps_ = eps(4.06, wp, x[1], w)
     nm = np.array(n_m(eps_))
     km = np.array(k_m(eps_))
     def matrix(n):
@@ -202,7 +200,7 @@ def mmt_short(x):
         # 0/1 layer
         D1 = D(n_vac, n_(nm[m], km[m]))
         # 1 layer
-        P1 = P(fi(w[m], n_(nm[m], km[m]), x[3]))
+        P1 = P(fi(w[m], n_(nm[m], km[m]), 4.42e-05))
         # 1/2 layer
         D2 = D(n_(nm[m], km[m]), n_(n_K108[m], k_K108[m]))
         # 2 layer
@@ -238,15 +236,15 @@ def mmt_short(x):
 
 
 def mmt_2000(x):
-    wp = w_p(x[0], 4.06)  # omega plasmon
-    eps_ = eps(4.06, wp, x[2], 0.2)
+    wp = w_p(x[0], 4.15)  # omega plasmon
+    eps_ = eps(4.15, wp, x[1], 0.2)
     nm = n_m(eps_)
     km = k_m(eps_)
     def matrix(delta1):
         # 0/1
         D1 = D(n_vac,n_(nm,km))
         # 1
-        P1 = P(fi(0.2,n_(nm, km), 4.22e-05))
+        P1 = P(fi(0.2,n_(nm, km), 4.42e-05))
         # 1/2
         D2 = D(n_(nm,km),n_(n_th_w, k_th_w))
         # 2
@@ -274,108 +272,40 @@ def mmt_2000(x):
     eqn1 = np.vstack((T, R))
     return eqn1
 
-def mmt_full(x):
-    Tm = []  # list of T
-    Rm = []  # list of R
-    a = 10
-    wp = w_p(x[0], x[1])  # omega plasmon
-    eps_ = eps(x[1], wp, x[2], w_full)
-    nm = (n_m(eps_))
-    km = (k_m(eps_))
-    def matrix(n):
-        delta = np.linspace(0, 2 * pi, n)
-        # 0/1
-        D1 = D(n_vac, n_(nm[m], km[m]))
-        # 1
-        P1 = P(fi(w_full[m], n_(nm[m], km[m]), x[3]))
-        # 1/2
-        D2 = D(n_(nm[m], km[m]), n_(n_K108_full[m], k_K108_full[m]))
-        # 2
-        P2 = P(fi_(w_full[m], n_(n_K108_full[m], k_K108_full[m]), d_K108, delta))
-        # 2/3
-        D3 = D(n_(n_K108_full[m], k_K108_full[m]), n_vac)
-        # transfer matrix
-        M = D3 @ P2 @ D2 @ P1 @ D1
-        return M
-    for m in range(0, z):
-        M1 = matrix(a)
-        M2 = matrix(a*2)
-        T2 = T(M2)
-        R2 = R(M2)
-        T1 = T(M1)
-        R1 = R(M1)
-        delta1 = np.linspace(0, 2 * pi, a)
-        delta2 = np.linspace(0, 2 * pi, 2 * a)
-        t_ = integrate.simpson(T2, delta2) * (1 / (2 * pi))
-        r_ = integrate.simpson(R2, delta2) * (1 / (2 * pi))
-        t = integrate.simpson(T1, delta1) * (1 / (2 * pi))
-        r = integrate.simpson(R1, delta1) * (1 / (2 * pi))
-        err = abs(r - r_) / (abs(r_))
-        if err > 10 ** (-5):
-            a = 2*a
-
-        Rm.append(r_)
-        Tm.append(t_)
-    T1 = np.array(Tm)
-    R1 = np.array(Rm)
-    eqn1 = np.vstack((T1, R1))
-    eqn1 = np.transpose(eqn1)
-    return eqn1
 # ==========================================================#
 #           ZERO APPROXIMATION OF PARAMETERS               #
 # ==========================================================#
 
-def Bounds(d_l,d_r,Ne_l,Ne_r,t_l,t_r,eps_l,eps_r):
-    d_0_left = d_l  # cm
-    d_0_right = d_r  # cm
+def Bounds(Ne_l,Ne_r,t_l,t_r):
     Ne_0_left = Ne_l  # cm^-3
     Ne_0_right = Ne_r  # cm^-3
     t_0_left = t_l  # 1/tau
     t_0_right = t_r  # 1/tau
-    eps_inf_0_left = eps_l
-    eps_inf_0_right = eps_r
     bnds = np.array([[Ne_0_left,Ne_0_right],
-                     [eps_inf_0_left,eps_inf_0_right],
-                     [t_0_left,t_0_right],
-                     [d_0_left,d_0_right]])
+                     [t_0_left,t_0_right]])
     return bnds
 
 if th == 6:
-    bnds = Bounds(4 * 10 ** (-5), 5 * 10 ** (-5),
-                  10 ** 20, 2 * 10 ** 21,
-                  1 * 10 ** 13, 10 ** 15,
-                  3.5, 5.0)
+    bnds = Bounds(10 ** 20, 2 * 10 ** 21,
+                  1 * 10 ** 13, 10 ** 15)
+if th == 5:
+    bnds = Bounds(10 ** 20, 2 * 10 ** 21,
+                  1 * 10 ** 13, 10 ** 15)
+if th == 4:
+    bnds = Bounds(10 ** 20, 2 * 10 ** 21,
+                  1 * 10 ** 13, 10 ** 15)
 
-elif th == 5:
-    bnds = Bounds(4 * 10 ** (-5), 5 * 10 ** (-5),
-                  10 ** 20, 10 ** 21,
-                  10 ** 14, 10 ** 15,
-                  3.5, 5.0)
+if th == 3:
+    bnds = Bounds(10 ** 20, 2 * 10 ** 21,
+                  1 * 10 ** 13, 10 ** 15)
 
-elif th == 4:
-    bnds = Bounds(4 * 10 ** (-5), 5 * 10 ** (-5),
-                  10 ** 20, 10 ** 21,
-                  10 ** 14, 10 ** 15,
-                  3.5, 5.0)
+if th == 2:
+    bnds = Bounds(10 ** 20, 2 * 10 ** 21,
+                  1 * 10 ** 13, 10 ** 15)
 
-elif th == 3:
-    bnds = Bounds(4 * 10 ** (-5), 5 * 10 ** (-5),
-                  10 ** 20, 10 ** 21,
-                  10 ** 14, 10 ** 15,
-                  3.5, 5.0)
-
-elif th == 2:
-    bnds = Bounds(4 * 10 ** (-5), 5 * 10 ** (-5),
-                  10 ** 20, 10 ** 21,
-                  10 ** 13, 10 ** 15,
-                  3.5, 5.0)
-
-elif th == 1:
-    bnds = Bounds(4 * 10 ** (-5), 5 * 10 ** (-5),
-                  10 ** 20, 10 ** 21,
-                  10 ** 14, 10 ** 15,
-                  3.5, 5.0)
-
+if th == 1:
+    bnds = Bounds(10 ** 20, 2 * 10 ** 21,
+                  1 * 10 ** 13, 10 ** 15)
 # ==========================================================#
 #                   FIND OPTIMAL PARAMETERS                 #
 # ==========================================================#
@@ -395,59 +325,18 @@ def func(x): # target function
     s2 = s[1,:]
     fun = gamma * ((np.sqrt((1/indx) * (np.sum(s1 ** 2)))) + np.sqrt((1/indx) * (np.sum(s2 ** 2)))) +  \
           alfa * (abs(R_exp_2000 - R_th_2000) / R_exp_2000) + beta * (abs(T_exp_2000 - T_th_2000) / T_exp_2000)
-    print('Target function',float(fun),'Parameters',x[0],x[2])
+    print('Target function',float(fun),'Parameters',x[0],x[1])
     return fun
 
 
 # zero approximation
-x0 = np.array([[9.679288535443641467e+20,
-                4.056926263274015731e+00,
-                8.448227115186128125e+13,
-                4.422343361532181030e-05]])
+x0 = np.array([9.679288535443641467e+20,
+               8.448227115186128125e+13])
 # bound for Nelder-Mead method
 ans = sp.optimize.minimize(func,x0,method = 'Nelder-Mead',bounds=bnds,
                            options={'disp':True,'adaptive': True,
                                     'maxiter':None, 'fatol' : 10 ** -3 , 'return_all': True})
 print(ans)
-# save ans
-# Целевая функция [0.10152954] Параметры [9.95370924e+20 4.14253718e+00 8.65067516e+13 4.40347988e-05]
-x_res = ans.x
-# calculate for all wavelength
-indx2 = n_K108_full.size
-z = indx2
-l1 = l_full * 10**(4)
-TR = np.array(mmt_full(x_res))
-if th == 6:
-    np.save('result\ TR6', TR)
-    np.save('result\ res', x_res)
-    np.savetxt('result\ TR6',TR)
-    np.savetxt('result\ res',x_res)
-elif th ==5:
-    np.save('result\ TR5', TR)
-    np.save('result\ res', x_res)
-    np.savetxt('result\ TR5', TR)
-    np.savetxt('result\ res', x_res)
-elif th == 4:
-    np.save('result\TR4', TR)
-    np.save('result\ res', x_res)
-    np.savetxt('result\ TR4', TR)
-    np.savetxt('result\ res', x_res)
-elif th == 3:
-    np.save('result\ TR3', TR)
-    np.save('result\ res', x_res)
-    np.savetxt('result\ res', x_res)
-    np.savetxt('result\ TR3',TR)
-elif th == 2:
-    np.save('result\ TR2', TR)
-    np.save('result\ res', x_res)
-    np.savetxt('result\ TR2',TR)
-    np.savetxt('result\ res', x_res)
-elif th == 1:
-    np.save('TR1', TR)
-    np.save('res', x_res)
-    np.savetxt('TR1',TR)
-    np.savetxt('res', x_res)
-np.save('L',l1)
-np.savetxt('L',l1)
-end1 = time.time()
-print(end1 - start1)
+
+
+
