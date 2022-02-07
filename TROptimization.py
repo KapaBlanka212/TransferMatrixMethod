@@ -17,7 +17,6 @@ me = 0.35 * m0  # electron mass in thin film
 e0 = 4.8 * 10 ** (-10)  #
 c = const.lightspeed  # cm/s
 l = const.short_wavelenght * 10 ** (-4)  # cm
-print(l)
 l_full = const.full_wavelength * 10 ** (-4) # cm
 w = 2 * pi * c / (l)  # sec^(-1)
 w_l = 2 * pi * c / 0.2 # 1/s
@@ -61,7 +60,6 @@ def TR_exp_short(T_exp,R_exp):
 
 if th == 6:
     full_exp = TR_exp_short(const.T6_short,const.R6_short)[0]
-    print(full_exp)
     np.savetxt('TR6_EXP',np.transpose(full_exp))
     #TR_exp_2000(0.0004,0.95)
     indx = TR_exp_short(const.T6_short,const.R6_short)[1]  # need for mmt(x)
@@ -70,28 +68,24 @@ if th == 6:
 
 elif th == 5:
     full_exp = TR_exp_short(const.T5_short, const.R5_short)[0]
-    print(full_exp)
     np.savetxt('TR5_EXP', np.transpose(full_exp))
     TR_exp_2000(0.0025, 0.93)
     indx = TR_exp_short(const.T5_short, const.R5_short)[1]  # need for mmt(x)
 
 elif th == 4:
     full_exp = TR_exp_short(const.T4_short, const.R4_short)[0]
-    print(full_exp)
     np.savetxt('TR4_EXP', np.transpose(full_exp))
     TR_exp_2000(0.0044, 0.89)
     indx = TR_exp_short(const.T6_short, const.R6_short)[1]  # need for mmt(x)
 
 elif th == 3:
     full_exp = TR_exp_short(const.T3_short, const.R3_short)[0]
-    print(full_exp)
     np.savetxt('TR3_EXP', np.transpose(full_exp))
     TR_exp_2000(0.0082, 0.87)
     indx = TR_exp_short(const.T3_short, const.R3_short)[1]  # need for mmt(x)
 
 elif th == 2:
     full_exp = TR_exp_short(const.T2_short, const.R2_short)[0]
-    print(full_exp)
     np.savetxt('TR2_EXP', np.transpose(full_exp))
     TR_exp_2000(0.011, 0.82)
     indx = TR_exp_short(const.T2_short, const.R2_short)[1]  # need for mmt(x)
@@ -99,7 +93,6 @@ elif th == 2:
 
 elif th == 1:
     full_exp = TR_exp_short(const.T1_short, const.R1_short)[0]
-    print(full_exp)
     np.savetxt('TR1_EXP', np.transpose(full_exp))
     TR_exp_2000(0.016, 0.78)
     indx = TR_exp_short(const.T1_short, const.R1_short)[1]  # need for mmt(x)
@@ -191,8 +184,8 @@ def mmt_short(x):
     Tm = []  # list of T
     Rm = []  # list of R
     a = 10
-    wp = w_p(x[0], 4.06)  # omega plasmon
-    eps_ = eps(4.06, wp, x[1], w)
+    wp = w_p(x[0], 4.15)  # omega plasmon
+    eps_ = eps(4.15, wp, x[1], w)
     nm = np.array(n_m(eps_))
     km = np.array(k_m(eps_))
     def matrix(n):
@@ -200,7 +193,7 @@ def mmt_short(x):
         # 0/1 layer
         D1 = D(n_vac, n_(nm[m], km[m]))
         # 1 layer
-        P1 = P(fi(w[m], n_(nm[m], km[m]), 4.42e-05))
+        P1 = P(fi(w[m], n_(nm[m], km[m]), 4.62e-05))
         # 1/2 layer
         D2 = D(n_(nm[m], km[m]), n_(n_K108[m], k_K108[m]))
         # 2 layer
@@ -215,13 +208,13 @@ def mmt_short(x):
         M2 = matrix(a*2)
         T2 =  T(M2)
         R2 =  R(M2)
-        T1 = T(M1)
+#        T1 = T(M1)
         R1 = R(M1)
         delta1 = np.linspace(0, 2 * pi, a)
         delta2 = np.linspace(0, 2 * pi, 2*a)
         t_ = integrate.simpson(T2, delta2) * (1 / (2 * pi))
         r_ = integrate.simpson(R2, delta2) * (1 / (2 * pi))
-        t = integrate.simpson(T1, delta1) * (1 / (2 * pi))
+#        t = integrate.simpson(T1, delta1) * (1 / (2 * pi))
         r = integrate.simpson(R1, delta1) * (1 / (2 * pi))
         err = abs(r - r_) / (abs(r_))
         if err > 10 ** (-5):
@@ -244,7 +237,7 @@ def mmt_2000(x):
         # 0/1
         D1 = D(n_vac,n_(nm,km))
         # 1
-        P1 = P(fi(0.2,n_(nm, km), 4.42e-05))
+        P1 = P(fi(0.2,n_(nm, km), 4.62e-05))
         # 1/2
         D2 = D(n_(nm,km),n_(n_th_w, k_th_w))
         # 2
@@ -272,40 +265,7 @@ def mmt_2000(x):
     eqn1 = np.vstack((T, R))
     return eqn1
 
-# ==========================================================#
-#           ZERO APPROXIMATION OF PARAMETERS               #
-# ==========================================================#
 
-def Bounds(Ne_l,Ne_r,t_l,t_r):
-    Ne_0_left = Ne_l  # cm^-3
-    Ne_0_right = Ne_r  # cm^-3
-    t_0_left = t_l  # 1/tau
-    t_0_right = t_r  # 1/tau
-    bnds = np.array([[Ne_0_left,Ne_0_right],
-                     [t_0_left,t_0_right]])
-    return bnds
-
-if th == 6:
-    bnds = Bounds(10 ** 20, 2 * 10 ** 21,
-                  1 * 10 ** 13, 10 ** 15)
-if th == 5:
-    bnds = Bounds(10 ** 20, 2 * 10 ** 21,
-                  1 * 10 ** 13, 10 ** 15)
-if th == 4:
-    bnds = Bounds(10 ** 20, 2 * 10 ** 21,
-                  1 * 10 ** 13, 10 ** 15)
-
-if th == 3:
-    bnds = Bounds(10 ** 20, 2 * 10 ** 21,
-                  1 * 10 ** 13, 10 ** 15)
-
-if th == 2:
-    bnds = Bounds(10 ** 20, 2 * 10 ** 21,
-                  1 * 10 ** 13, 10 ** 15)
-
-if th == 1:
-    bnds = Bounds(10 ** 20, 2 * 10 ** 21,
-                  1 * 10 ** 13, 10 ** 15)
 # ==========================================================#
 #                   FIND OPTIMAL PARAMETERS                 #
 # ==========================================================#
@@ -325,18 +285,16 @@ def func(x): # target function
     s2 = s[1,:]
     fun = gamma * ((np.sqrt((1/indx) * (np.sum(s1 ** 2)))) + np.sqrt((1/indx) * (np.sum(s2 ** 2)))) +  \
           alfa * (abs(R_exp_2000 - R_th_2000) / R_exp_2000) + beta * (abs(T_exp_2000 - T_th_2000) / T_exp_2000)
-    print('Target function',float(fun),'Parameters',x[0],x[1])
     return fun
 
+Ne = np.linspace(9.3e20, 1.1e21, 50)
+t = np.linspace(8.1e13, 8.9e13, 50)
 
-# zero approximation
-x0 = np.array([9.679288535443641467e+20,
-               8.448227115186128125e+13])
-# bound for Nelder-Mead method
-ans = sp.optimize.minimize(func,x0,method = 'Nelder-Mead',bounds=bnds,
-                           options={'disp':True,'adaptive': True,
-                                    'maxiter':None, 'fatol' : 10 ** -3 , 'return_all': True})
-print(ans)
-
-
-
+start = time.time()
+j = 0
+while j < 50:
+    for k in range(0,50):
+        print(t[k],Ne[j],float(func(x(Ne[j],t[k]))))
+    j += 1
+end = time.time()
+print(end - start)
