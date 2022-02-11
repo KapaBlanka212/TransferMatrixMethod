@@ -5,8 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d89ebead-bab4-47b5-876a-05136f96fdaf" name="Changes" comment="Add NKrootfinding&#10;Create new def in TR">
-      <change afterPath="$PROJECT_DIR$/NewWork.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantMAT/M4_short.mat" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantMAT/M4_short.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MaterialConstant.py" beforeDir="false" afterPath="$PROJECT_DIR$/MaterialConstant.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NKrootfinding.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TR6_EXP" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TRCalculating.py" beforeDir="false" afterPath="$PROJECT_DIR$/TRCalculating.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TROptimization.py" beforeDir="false" afterPath="$PROJECT_DIR$/TROptimization.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/result/ TR6" beforeDir="false" afterPath="$PROJECT_DIR$/result/ TR6" afterDir="false" />
@@ -50,7 +54,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="preferences.keymap" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -67,7 +71,28 @@
       <recent name="C:\Users\Nikita\PycharmProjects\TransferMatrixMethod\K8_ANSER" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.TRCalculating">
+  <component name="RunManager" selected="Python.mat">
+    <configuration name="NKrootfinding" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\Nikita\AppData\Local\Programs\Python\Python38\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/NKrootfinding.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="NewWork" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -173,6 +198,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="mat" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="C:\Users\Nikita\AppData\Local\Programs\Python\Python38\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/mat.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="wAnderson model" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -201,10 +247,13 @@
       <item itemvalue="Python.SD" />
       <item itemvalue="Python.TRCalculating" />
       <item itemvalue="Python.wAnderson model" />
+      <item itemvalue="Python.NKrootfinding" />
+      <item itemvalue="Python.mat" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.TRCalculating" />
+        <item itemvalue="Python.NKrootfinding" />
         <item itemvalue="Python.and" />
         <item itemvalue="Python.wAnderson model" />
         <item itemvalue="Python.SD" />
@@ -265,31 +314,5 @@
     <MESSAGE value="TODO: realisation MMT for only one point l/w : DONE" />
     <MESSAGE value="Add NKrootfinding&#10;Create new def in TR" />
     <option name="LAST_COMMIT_MESSAGE" value="Add NKrootfinding&#10;Create new def in TR" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/TRCalculating.py</url>
-          <line>403</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/TRCalculating.py</url>
-          <line>405</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/TRCalculating.py</url>
-          <line>404</line>
-          <option name="timeStamp" value="3" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/TRCalculating.py</url>
-          <line>402</line>
-          <option name="timeStamp" value="6" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>

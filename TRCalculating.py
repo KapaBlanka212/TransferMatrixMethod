@@ -19,7 +19,7 @@ c = constant.lightspeed  # cm/s
 len = constant.short_wavelenght * 10 ** (-4)  # cm
 len_full = constant.full_wavelength * 10 ** (-4)  # cm
 w = 2 * pi * c / len  # sec^(-1)
-w_l = 2 * pi * c / 0.2  # 1/s
+w_2000 = 2 * pi * c / 0.2  # 1/s
 w_full = 2 * pi * c / len_full  # sec^(-1)
 i = 1j  # image 1
 # ==========================================================#
@@ -31,11 +31,11 @@ th = int(input('Input the number of thin film '))
 # ==========================================================#
 d_K108 = constant.d_K108  # cm
 n_K108 = constant.short_n  # for short wavelength (0.4 to 4 mcm)
-k_K108 = constant.short_k  # for short wavelength (0.4 to 4 mcm)
-n_th_w = 2.5  # n_k108 for l = 2000 mcm
-k_th_w = 2.49 * 0.2 / (4 * pi)  # k_K108 l = 2000 mcm
+k_K108 = constant.short_alfa * c / (2 * w)  # for short wavelength (0.4 to 4 mcm)
+n_th_w = 2.51  # n_k108 for l = 2000 mcm
+k_th_w = 1.97 * 0.2 / (4 * pi)  # k_K108 l = 2000 mcm
 n_K108_full = constant.n_K108  # for l from 0.4 to 4 mcm and from 300 mcm to 5000 mcm
-k_K108_full = constant.k_K108  # for l from 0.4 to 4 mcm and from 300 mcm to 5000 mcm
+k_K108_full = constant.alfa_K108 * c / (2 * w_full) # for l from 0.4 to 4 mcm and from 300 mcm to 5000 mcm
 # ==========================================================#
 #                     VACUUM PARAMETERS                     #
 # ==========================================================#
@@ -64,24 +64,29 @@ if th == 6:
     full_exp = tr_exp_short(constant.T6_short, constant.R6_short)[0]
     np.savetxt('TR6_EXP', np.transpose(full_exp))
     index = tr_exp_short(constant.T6_short, constant.R6_short)[1]  # need for mmt(x)
-    t_exp_2000 = tr_exp_2000(3.9e-4, 0.95)[0]
-    r_exp_2000 = tr_exp_2000(3.9e-4, 0.95)[1]
+    t_exp_2000 = tr_exp_2000(4.0e-4, 0.95)[0]
+    r_exp_2000 = tr_exp_2000(4.0e-4, 0.95)[1]
 
 elif th == 5:
     full_exp = tr_exp_short(constant.T5_short, constant.R5_short)[0]
     np.savetxt('TR5_EXP', np.transpose(full_exp))
-    tr_exp_2000(0.0025, 0.93)
-    index = TR_exp_short(constant.T5_short, constant.R5_short)[1]  # need for mmt(x)
+    index = tr_exp_short(constant.T5_short, constant.R5_short)[1]  # need for mmt(x)
+    t_exp_2000 = tr_exp_2000(0.0025, 0.93)[0]
+    r_exp_2000 = tr_exp_2000(0.0025, 0.93)[1]
+
 
 elif th == 4:
     full_exp = tr_exp_short(constant.T4_short, constant.R4_short)[0]
     np.savetxt('TR4_EXP', np.transpose(full_exp))
-    tr_exp_2000(0.0044, 0.89)
+    t_exp_2000 = tr_exp_2000(0.0044, 0.89)[0]
+    r_exp_2000 = tr_exp_2000(0.0044, 0.89)[1]
     index = tr_exp_short(constant.T6_short, constant.R6_short)[1]  # need for mmt(x)
 
 elif th == 3:
     full_exp = tr_exp_short(constant.T3_short, constant.R3_short)[0]
     np.savetxt('TR3_EXP', np.transpose(full_exp))
+    t_exp_2000 = tr_exp_2000(0.0082, 0.87)[0]
+    r_exp_2000 = tr_exp_2000(0.0082, 0.87)[1]
     tr_exp_2000(0.0082, 0.87)
     index = tr_exp_short(constant.T3_short, constant.R3_short)[1]  # need for mmt(x)
 
@@ -121,7 +126,7 @@ def fi_k108(fr, n, d, delta):
 
 
 # ==========================================================#
-#                      THEORY DRUDE                         #
+#                      THEORY DRUDE                        #
 # ==========================================================#
 
 
@@ -155,10 +160,12 @@ start1 = time.time()
 z = index
 CONST = (1 / (2 * pi))
 
-def P(fi):
-    p_out = np.array([[np.exp(i * fi), 0],
-                      [0, np.exp(-i * fi)]], dtype=object)
+
+def P(pot):
+    p_out = np.array([[np.exp(i * pot), 0],
+                      [0, np.exp(-i * pot)]], dtype=object)
     return p_out
+
 
 def D(n1, n2):
     A = 1 / (2*n2)
@@ -237,47 +244,52 @@ def mmt_short(par):
 
 
 def mmt_2000(par):
+    a = 10
     wp = w_p(par[0], par[1])  # omega plasmon
-    eps_ = eps(par[1], wp, par[2], 0.2)
+    eps_ = eps(par[1], wp, par[2], w_2000)
     nm = n_m(eps_)
     km = k_m(eps_)
 
-    def matrix(delta1):
-        # 0/1
+    def matrix(n):
+        delta = np.linspace(-pi, pi, n)
+        # 0/1 layer
         d1 = D(n_vac, n_(nm, km))
-        # 1
-        p1 = P(fi(0.2, n_(nm, km), par[3]))
-        # 1/2
+        # 1 layer
+        p1 = P(fi(w_2000, n_(nm, km), par[3]))
+        # 1/2 layer
         d2 = D(n_(nm, km), n_(n_th_w, k_th_w))
-        # 2
-        p2 = P(fi_k108(0.2, n_(n_th_w, k_th_w), d_K108, delta1))
-        # 2/3
+        # 2 layer
+        p2 = P(fi_k108(w_2000, n_(n_th_w, k_th_w), d_K108, delta))
+        # 2/3 layer
         d3 = D(n_(n_th_w, k_th_w), n_vac)
         # transfer matrix
-        m_out = d3 @ p2 @ d2 @ p1 @ d1
-        return m_out
-
-    def int_transmittance(delta1):
-        m = matrix(delta1)
-        transmittance_k108 = (abs(m[0, 0] - ((m[0, 1] * m[1, 0]) / m[1, 1]))) ** 2
-        return transmittance_k108
-
-    def int_reflectance(delta1):
-        m = matrix(delta1)
-        reflectance_k108 = (abs(m[1, 0] / m[1, 1])) ** 2
-        return reflectance_k108
-
-    t = integrate.quad(int_transmittance, -pi, pi)
-    t2 = CONST * t[0]
-    r = integrate.quad(int_reflectance, -pi, pi)
-    r2 = CONST * r[0]
-    eqn1 = np.vstack((t2, r2))
+        matrix_out = d3 @ p2 @ d2 @ p1 @ d1
+        return matrix_out
+    mat1 = matrix(a)
+    mat2 = matrix(a * 2)
+    transmittance2 = tra_mat(mat2)
+    reflectance2 = re_mat(mat2)
+    transmittance1 = tra_mat(mat1)
+    reflectance1 = re_mat(mat1)
+    delta1 = np.linspace(0, 2 * pi, a)
+    delta2 = np.linspace(0, 2 * pi, 2 * a)
+    transmittance2_int = integrate.simpson(transmittance2, delta2) * CONST
+    reflectance2_int = integrate.simpson(reflectance2, delta2) * CONST
+    transmittance1_int = integrate.simpson(transmittance1, delta1) * CONST
+    reflectance1_int = integrate.simpson(reflectance1, delta1) * CONST
+    err_r = abs(reflectance1_int - reflectance2_int) / (abs(reflectance2_int))
+    err_t = abs(transmittance1_int - transmittance2_int) / (abs(transmittance2_int))
+    if err_r > 10 ** (-5):
+        a = 2 * a
+    if err_t > 10 ** (-5):
+        a = 2 * a
+    eqn1 = np.vstack((transmittance2_int, reflectance2_int))
     return eqn1
 
 
 def mmt_full(par):
-    t_list_long = []  # list of T
-    r_list_long = []  # list of R
+    t_list_full = []  # list of T
+    r_list_full = []  # list of R
     a = 10  # amount of dot on first integrate step
     wp = w_p(par[0], par[1])  # omega plasmon
     eps_ = eps(par[1], wp, par[2], w_full)
@@ -304,11 +316,11 @@ def mmt_full(par):
         mat1 = matrix(a)
         mat2 = matrix(a * 2)
         # transmittance
-        transmittance1 = T(mat1)
-        transmittance2 = T(mat2)
+        transmittance1 = tra_mat(mat1)
+        transmittance2 = tra_mat(mat2)
         # reflectance
-        reflectance2 = R(mat2)
-        reflectance1 = R(mat1)
+        reflectance2 = re_mat(mat2)
+        reflectance1 = re_mat(mat1)
         # integration bounds
         delta1 = np.linspace(0, 2 * pi, a)
         delta2 = np.linspace(0, 2 * pi, 2 * a)
@@ -327,10 +339,10 @@ def mmt_full(par):
             a = 2 * a
         if err_t > 10 ** -5:
             a = 2 * a
-        r_list_long.append(reflectance_int_2a)  # add point in massive
-        t_list_long.append(transmittance_int_2a)  # add point in massive
-    tr_matrix_long = np.array(tm)  # type list - > type matrix
-    re_matrix_long = np.array(rm)
+        r_list_full.append(reflectance_int_2a)  # add point in massive
+        t_list_full.append(transmittance_int_2a)  # add point in massive
+    tr_matrix_long = np.array(t_list_full)  # type list - > type matrix
+    re_matrix_long = np.array(r_list_full)
     eqn1 = np.vstack((tr_matrix_long, re_matrix_long))  # massive of transfer matrix
     eqn1 = np.transpose(eqn1)
     return eqn1
@@ -340,20 +352,21 @@ def mmt_full(par):
 #           ZERO APPROXIMATION OF PARAMETERS               #
 # ==========================================================#
 
-
+# this function create a bounds for Nelder - Mead minimize method
 def bounds(d_l, d_r, ne_l, ne_r, t_l, t_r, eps_l, eps_r):
     bound = np.array([[ne_l, ne_r],
-                     [eps_l, eps_r],
-                     [t_l, t_r],
-                     [d_l, d_r]])
+                      [eps_l, eps_r],
+                      [t_l, t_r],
+                      [d_l, d_r]])
     return bound
 
 
+# for unequal ITO film we use unequal bounds
 if th == 6:
-    bnd = bounds(4.0e-5, 4.5e-5,
-                 9.5e20, 9.8e20,
-                 8e13, 10.0e13,
-                 4.0, 4.2)
+    bnd = bounds(4.0e-5, 5.0e-5,
+                 9.0e20, 1.0e21,
+                 7e13, 1.5e14,
+                 3.5, 4.5)
 
 elif th == 5:
     bnd = bounds(4.0e-5, 5.0e-5,
@@ -362,9 +375,9 @@ elif th == 5:
                  3.5, 5.0)
 
 elif th == 4:
-    bnd = bounds(4 * 10 ** (-5), 5 * 10 ** (-5),
-                 10 ** 20, 10 ** 21,
-                 10 ** 14, 10 ** 15,
+    bnd = bounds(1 * 10 ** (-5), 5 * 10 ** (-5),
+                 5.0e20, 1.0e21,
+                 1.0e13, 1.0e15,
                  3.5, 5.0)
 
 elif th == 3:
@@ -390,13 +403,13 @@ elif th == 1:
 # ==========================================================#
 
 
-def func(par):  # target function
-    alfa = 1
-    beta = 1
-    gamma = 1
+def func(par):  # target function that use for describe of amount error between theoretical and experimental value
+    alfa = 1  # mass function
+    beta = 1  # mass function
+    gamma = 2  # mass function
     r = mmt_2000(par)
-    r_th_2000 = r[1, :]
-    t_th_2000 = r[0, :]
+    r_th_2000 = float(r[1, :])
+    t_th_2000 = float(r[0, :])
     s = abs(mmt_short(par) - full_exp)
     s1 = s[0, :]
     s2 = s[1, :]
@@ -404,23 +417,30 @@ def func(par):  # target function
     long_wavelength_r = alfa * (abs(r_exp_2000 - r_th_2000) / abs(r_exp_2000))
     long_wavelength_t = beta * (abs(t_exp_2000 - t_th_2000) / abs(t_exp_2000))
     fun = short_wavelength + long_wavelength_r + long_wavelength_t
-    print('Target function', float(fun), 'Parameters: ',
+    print('Parameters: ',
           'Ne :', par[0],
           'eps_inf: ', par[1],
           '1/tau: ', par[2],
           'd: ', par[3])
+    # need for control a amount of error
+    print('Target function: ', float(fun), '\n'
+          'long wavelength transmitting: ', float(long_wavelength_t), '\n'
+          'long wavelength reflectance: ', float(long_wavelength_r), '\n'
+          'short wavelength in sum: ', short_wavelength, '\n')
     return fun
 
 
 # zero approximation
-x0 = np.array([[9.68291676e+20, 4.05159480e+00, 8.45263626e+13, 4.42299975e-05]])
+x0 = np.array([[9.0e+20, 3.91652396e+00,
+                9.17709028e+13, 1.6062110e-05]])
+# ans == result of minimization
 ans = sp.optimize.minimize(func, x0,
-                           method='Nelder-Mead',
+                           method='Nelder-Mead',  # the method of minimization our function
                            bounds=bnd,
                            options={'disp': True,
                                     'adaptive': True,
                                     'maxiter': None,
-                                    'fatol' : 10 ** -4,
+                                    'fatol': 10 ** -4,
                                     'return_all': True})
 print(ans)
 # save ans
@@ -430,18 +450,19 @@ index_full = n_K108_full.size
 z = index_full
 l1 = len_full * 10 ** 4
 TR = np.array(mmt_full(x_res))
+# save result in txt file
 if th == 6:
     np.save('result\ TR6', TR)
     np.save('result\ res', x_res)
-    np.savetxt('result\ TR6',TR)
-    np.savetxt('result\ res',x_res)
-elif th ==5:
+    np.savetxt('result\ TR6', TR)
+    np.savetxt('result\ res', x_res)
+elif th == 5:
     np.save('result\ TR5', TR)
     np.save('result\ res', x_res)
     np.savetxt('result\ TR5', TR)
     np.savetxt('result\ res', x_res)
 elif th == 4:
-    np.save('result\TR4', TR)
+    np.save('result\ TR4', TR)
     np.save('result\ res', x_res)
     np.savetxt('result\ TR4', TR)
     np.savetxt('result\ res', x_res)
@@ -449,18 +470,18 @@ elif th == 3:
     np.save('result\ TR3', TR)
     np.save('result\ res', x_res)
     np.savetxt('result\ res', x_res)
-    np.savetxt('result\ TR3',TR)
+    np.savetxt('result\ TR3', TR)
 elif th == 2:
     np.save('result\ TR2', TR)
     np.save('result\ res', x_res)
-    np.savetxt('result\ TR2',TR)
+    np.savetxt('result\ TR2', TR)
     np.savetxt('result\ res', x_res)
 elif th == 1:
     np.save('TR1', TR)
     np.save('res', x_res)
-    np.savetxt('TR1',TR)
+    np.savetxt('TR1', TR)
     np.savetxt('res', x_res)
 np.save('L', l1)
 np.savetxt('L', l1)
 end1 = time.time()
-print(end1 - start1)
+print('program work in min: ', (end1 - start1) / 60)
