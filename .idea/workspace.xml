@@ -4,15 +4,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="d89ebead-bab4-47b5-876a-05136f96fdaf" name="Changes" comment="Add NKrootfinding&#10;Create new def in TR">
-      <change afterPath="$PROJECT_DIR$/d" afterDir="false" />
+    <list default="true" id="87ae2209-2188-4bad-a14c-eecb49112ee7" name="Changes" comment="Add NKrootfinding&#10;Create new def in TR">
+      <change afterPath="$PROJECT_DIR$/dotmatread.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantMAT/M4_short.mat" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantMAT/M4_short.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MaterialConstant.py" beforeDir="false" afterPath="$PROJECT_DIR$/MaterialConstant.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NKrootfinding.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/ k_long.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/ k_short.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/ n_long.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/ n_short.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ConstantNPY/R4_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/R4_short.npy" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/NewWork.py" beforeDir="false" afterPath="$PROJECT_DIR$/NewWork.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TR4_EXP" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TR5_EXP" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TR6_EXP" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/TRCalculating.py" beforeDir="false" afterPath="$PROJECT_DIR$/TRCalculating.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TROptimization.py" beforeDir="false" afterPath="$PROJECT_DIR$/TROptimization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/result/ TR4" beforeDir="false" afterPath="$PROJECT_DIR$/result/ TR4" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/result/ TR4.npy" beforeDir="false" afterPath="$PROJECT_DIR$/result/ TR4.npy" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/result/ TR6" beforeDir="false" afterPath="$PROJECT_DIR$/result/ TR6" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/result/ TR6.npy" beforeDir="false" afterPath="$PROJECT_DIR$/result/ TR6.npy" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/result/ res" beforeDir="false" afterPath="$PROJECT_DIR$/result/ res" afterDir="false" />
@@ -44,6 +52,9 @@
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/MaterialConstant.py" root0="FORCE_HIGHLIGHTING" />
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="1zbgSKZbHktmzstCfEEVLA2ukrA" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -53,8 +64,8 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../TransferMatrixMethod" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -68,10 +79,12 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Nikita\PycharmProjects\pythonProject1\result" />
+      <recent name="C:\Users\Nikita\PycharmProjects\pythonProject1\TRtext" />
       <recent name="C:\Users\Nikita\PycharmProjects\TransferMatrixMethod\K8_ANSER" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.mat">
+  <component name="RunManager" selected="Python.TRCalculating">
     <configuration name="NKrootfinding" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -114,39 +127,18 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="SD" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="C:\Users\Nikita\PycharmProjects\TransferMatrixMethod\venv\Scripts\python.exe" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="false" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/SD.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="TRCalculating" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="pythonProject1" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Users\Nikita\PycharmProjects\TransferMatrixMethod\venv\Scripts\python.exe" />
+      <option name="SDK_HOME" value="C:\Users\Nikita\PycharmProjects\pythonProject1\venv\Scripts\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/TRCalculating.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -156,18 +148,18 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="TROptimization" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+    <configuration name="TROptimization" type="PythonConfigurationType" factoryName="Python" singleton="false" nameIsGenerated="true">
+      <module name="pythonProject1" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Users\Nikita\AppData\Local\Programs\Python\Python38\python.exe" />
+      <option name="SDK_HOME" value="C:\Users\Nikita\PycharmProjects\pythonProject1\venv\Scripts\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/TROptimization.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
@@ -190,6 +182,27 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <module name="" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/../MyPythonProject/For_Study/.idea/and.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="dotmatread" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="pythonProject1" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/dotmatread.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -243,27 +256,27 @@
     <list>
       <item itemvalue="Python.TROptimization" />
       <item itemvalue="Python.NewWork" />
+      <item itemvalue="Python.mat" />
       <item itemvalue="Python.and" />
-      <item itemvalue="Python.SD" />
       <item itemvalue="Python.TRCalculating" />
       <item itemvalue="Python.wAnderson model" />
       <item itemvalue="Python.NKrootfinding" />
-      <item itemvalue="Python.mat" />
+      <item itemvalue="Python.dotmatread" />
     </list>
     <recent_temporary>
       <list>
         <item itemvalue="Python.TRCalculating" />
+        <item itemvalue="Python.dotmatread" />
         <item itemvalue="Python.NKrootfinding" />
         <item itemvalue="Python.and" />
         <item itemvalue="Python.wAnderson model" />
-        <item itemvalue="Python.SD" />
       </list>
     </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="d89ebead-bab4-47b5-876a-05136f96fdaf" name="Changes" comment="" />
+      <changelist id="87ae2209-2188-4bad-a14c-eecb49112ee7" name="Changes" comment="Add NKrootfinding&#10;Create new def in TR" />
       <created>1634422214205</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
@@ -308,7 +321,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="TODO: realisation MMT for only one point l/w : DONE" />

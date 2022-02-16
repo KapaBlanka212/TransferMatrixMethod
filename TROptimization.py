@@ -62,38 +62,35 @@ def tr_exp_short(t_exp, r_exp):
 
 if th == 6:
     full_exp = tr_exp_short(constant.T6_short, constant.R6_short)[0]
-    np.savetxt('TR6_EXP', np.transpose(full_exp))
     index = tr_exp_short(constant.T6_short, constant.R6_short)[1]  # need for mmt(x)
     t_exp_2000 = tr_exp_2000(4.0e-4, 0.95)[0]
     r_exp_2000 = tr_exp_2000(4.0e-4, 0.95)[1]
 
 elif th == 5:
     full_exp = tr_exp_short(constant.T5_short, constant.R5_short)[0]
-    np.savetxt('TR5_EXP', np.transpose(full_exp))
     tr_exp_2000(0.0025, 0.93)
-    index = TR_exp_short(constant.T5_short, constant.R5_short)[1]  # need for mmt(x)
+    t_exp_2000 = tr_exp_2000(0.0025, 0.93)[0]
+    r_exp_2000 = tr_exp_2000(0.0025, 0.93)[1]
+    index = tr_exp_short(constant.T5_short, constant.R5_short)[1]  # need for mmt(x)
 
 elif th == 4:
     full_exp = tr_exp_short(constant.T4_short, constant.R4_short)[0]
-    np.savetxt('TR4_EXP', np.transpose(full_exp))
-    tr_exp_2000(0.0044, 0.89)
+    t_exp_2000 = tr_exp_2000(0.0044, 0.89)[0]
+    r_exp_2000 = tr_exp_2000(0.0044, 0.89)[1]
     index = tr_exp_short(constant.T6_short, constant.R6_short)[1]  # need for mmt(x)
 
 elif th == 3:
     full_exp = tr_exp_short(constant.T3_short, constant.R3_short)[0]
-    np.savetxt('TR3_EXP', np.transpose(full_exp))
     tr_exp_2000(0.0082, 0.87)
     index = tr_exp_short(constant.T3_short, constant.R3_short)[1]  # need for mmt(x)
 
 elif th == 2:
     full_exp = tr_exp_short(constant.T2_short, constant.R2_short)[0]
-    np.savetxt('TR2_EXP', np.transpose(full_exp))
     tr_exp_2000(0.011, 0.82)
     index = tr_exp_short(constant.T2_short, constant.R2_short)[1]  # need for mmt(x)
 
 elif th == 1:
     full_exp = tr_exp_short(constant.T1_short, constant.R1_short)[0]
-    np.savetxt('TR1_EXP', np.transpose(full_exp))
     tr_exp_2000(0.016, 0.78)
     index = tr_exp_short(constant.T1_short, constant.R1_short)[1]  # need for mmt(x)
 
@@ -125,9 +122,9 @@ def fi_k108(fr, n, d, delta):
 # ==========================================================#
 
 
-def eps(eps_inf, wp, t, fr):  # t = 1/tau
+def eps(eps_inf, wp, t, fr):
     wp2 = wp ** 2
-    w_ = fr*(fr+i*t)
+    w_ = fr * (fr + i * t)
     eps_return = eps_inf * (1.0 - wp2 / w_)
     return eps_return
 
@@ -168,8 +165,6 @@ def D(n1, n2):
                           [n2 - n1, n1 + n2]])
     return d_out
 
-# TODO: CALCULATE # 4 d = 150 nm
-
 
 def x(t_film, d_film):
     x_out = np.array([t_film,  # concentration
@@ -192,9 +187,9 @@ def mmt_short(par):
     tm = []  # list of T
     rm = []  # list of R
     a = 10
-    wp = w_p(9.478436508053333606e+20,
-             3.908029646434661775e+00)  # omega plasmon
-    eps_ = eps(3.908029646434661775e+00, wp,
+    wp = w_p(9.578347227273248113e+20,
+             3.943554505613638739e+00)  # omega plas1mon
+    eps_ = eps(3.943554505613638739e+00, wp,
                par[0], w)
     nm = np.array(n_m(eps_))
     km = np.array(k_m(eps_))
@@ -243,9 +238,9 @@ def mmt_short(par):
 
 def mmt_2000(par):
     a = 10
-    wp = w_p(9.478436508053333606e+20,
-             3.908029646434661775e+00)  # omega plasmon
-    eps_ = eps(3.908029646434661775e+00, wp,
+    wp = w_p(9.578347227273248113e+20,
+             3.943554505613638739e+00)  # omega plasmon
+    eps_ = eps(3.943554505613638739e+00, wp,
                par[0], w_l)
     nm = n_m(eps_)
     km = k_m(eps_)
@@ -287,10 +282,10 @@ def mmt_2000(par):
     return eqn1
 
 
-def func(par): # target function
-    alfa = 1  # mass function
-    beta = 1  # mass function
-    gamma = 1  # mass function
+def func(par):  # target function
+    alfa = 1   # mass function
+    beta = 1   # mass function
+    gamma = 4   # mass function
     r = mmt_2000(par)
     r_th_2000 = float(r[1, :])
     t_th_2000 = float(r[0, :])
@@ -304,21 +299,14 @@ def func(par): # target function
     return fun
 
 
-d = np.linspace(4.45e-05, 4.60e-05, 50)
-t = np.linspace(1.05e14, 1.4e14, 50)
-# Завтра надо будет проверить, выведет что-нить, и
-# выводить потом только значение целевой функции
+d = np.linspace(4.25e-05, 4.75e-05, 70)
+t = np.linspace(1.15e14, 1.45e14, 70)
 d_array = np.array(d)
 t_array = np.array(t)
-np.savetxt('t', t_array)
-np.savetxt('d', d_array)
+
 start = time.time()
-#print(func(x(1.05e+14, 4.45e-05)))
-#print(func(x(1.222849457206888750e+14, 4.502731571493879208e-05)))
-for j in range(0, 50):
-    for k in range(0, 50):
-        #list_t_func.append(t[k])
-        #list_d_func.append(d[j])
+for j in range(0, 70):
+    for k in range(0, 70):
         print(t[k], d[j], func(x(t[k], d[j])))
 end = time.time()
-print((end - start) / 60)
+print((end - start) / 3600)

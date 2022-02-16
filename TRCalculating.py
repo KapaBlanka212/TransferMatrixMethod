@@ -16,9 +16,9 @@ m0 = 9.1 * 10 ** (-28)  # electron mass g
 me = 0.35 * m0  # electron mass in thin film
 e0 = 4.8 * 10 ** (-10)  # SGS
 c = constant.lightspeed  # cm/s
-len = constant.short_wavelenght * 10 ** (-4)  # cm
+length = constant.short_wavelenght * 10 ** (-4)  # cm
 len_full = constant.full_wavelength * 10 ** (-4)  # cm
-w = 2 * pi * c / len  # sec^(-1)
+w = 2 * pi * c / length  # sec^(-1)
 w_2000 = 2 * pi * c / 0.2  # 1/s
 w_full = 2 * pi * c / len_full  # sec^(-1)
 i = 1j  # image 1
@@ -62,14 +62,12 @@ def tr_exp_short(t_exp, r_exp):
 
 if th == 6:
     full_exp = tr_exp_short(constant.T6_short, constant.R6_short)[0]
-    np.savetxt('TR6_EXP', np.transpose(full_exp))
     index = tr_exp_short(constant.T6_short, constant.R6_short)[1]  # need for mmt(x)
     t_exp_2000 = tr_exp_2000(4.0e-4, 0.95)[0]
     r_exp_2000 = tr_exp_2000(4.0e-4, 0.95)[1]
 
 elif th == 5:
     full_exp = tr_exp_short(constant.T5_short, constant.R5_short)[0]
-    np.savetxt('TR5_EXP', np.transpose(full_exp))
     index = tr_exp_short(constant.T5_short, constant.R5_short)[1]  # need for mmt(x)
     t_exp_2000 = tr_exp_2000(0.0025, 0.93)[0]
     r_exp_2000 = tr_exp_2000(0.0025, 0.93)[1]
@@ -77,14 +75,12 @@ elif th == 5:
 
 elif th == 4:
     full_exp = tr_exp_short(constant.T4_short, constant.R4_short)[0]
-    np.savetxt('TR4_EXP', np.transpose(full_exp))
     t_exp_2000 = tr_exp_2000(0.0044, 0.89)[0]
     r_exp_2000 = tr_exp_2000(0.0044, 0.89)[1]
     index = tr_exp_short(constant.T6_short, constant.R6_short)[1]  # need for mmt(x)
 
 elif th == 3:
     full_exp = tr_exp_short(constant.T3_short, constant.R3_short)[0]
-    np.savetxt('TR3_EXP', np.transpose(full_exp))
     t_exp_2000 = tr_exp_2000(0.0082, 0.87)[0]
     r_exp_2000 = tr_exp_2000(0.0082, 0.87)[1]
     tr_exp_2000(0.0082, 0.87)
@@ -92,14 +88,14 @@ elif th == 3:
 
 elif th == 2:
     full_exp = tr_exp_short(constant.T2_short, constant.R2_short)[0]
-    np.savetxt('TR2_EXP', np.transpose(full_exp))
-    tr_exp_2000(0.011, 0.82)
+    t_exp_2000 = tr_exp_2000(0.011, 0.82)[0]
+    r_exp_2000 = tr_exp_2000(0.011, 0.82)[1]
     index = tr_exp_short(constant.T2_short, constant.R2_short)[1]  # need for mmt(x)
 
 elif th == 1:
     full_exp = tr_exp_short(constant.T1_short, constant.R1_short)[0]
-    np.savetxt('TR1_EXP', np.transpose(full_exp))
-    tr_exp_2000(0.016, 0.78)
+    t_exp_2000 = tr_exp_2000(0.016, 0.78)[0]
+    r_exp_2000 = tr_exp_2000(0.016, 0.78)[1]
     index = tr_exp_short(constant.T1_short, constant.R1_short)[1]  # need for mmt(x)
 
 
@@ -129,8 +125,9 @@ def fi_k108(fr, n, d, delta):
 #                      THEORY DRUDE                        #
 # ==========================================================#
 
+# t == 1 / tau, [cm-1]
 
-def eps(eps_inf, wp, t, fr):  # t = 1/tau
+def eps(eps_inf, wp, t, fr):
     wp2 = wp ** 2
     w_ = fr*(fr+i*t)
     eps_return = eps_inf * (1.0 - wp2 / w_)
@@ -161,13 +158,13 @@ z = index
 CONST = (1 / (2 * pi))
 
 
-def P(pot):
+def p_matrix(pot):
     p_out = np.array([[np.exp(i * pot), 0],
                       [0, np.exp(-i * pot)]], dtype=object)
     return p_out
 
 
-def D(n1, n2):
+def d_interface(n1, n2):
     A = 1 / (2*n2)
     d_out = A * np.array([[n1 + n2, n2 - n1],
                           [n2 - n1, n1 + n2]])
@@ -204,15 +201,15 @@ def mmt_short(par):
     def matrix(n):
         delta = np.linspace(-pi, pi, n)
         # 0/1 layer
-        d1 = D(n_vac, n_(nm[m], km[m]))
+        d1 = d_interface(n_vac, n_(nm[m], km[m]))
         # 1 layer
-        p1 = P(fi(w[m], n_(nm[m], km[m]), par[3]))
+        p1 = p_matrix(fi(w[m], n_(nm[m], km[m]), par[3]))
         # 1/2 layer
-        d2 = D(n_(nm[m], km[m]), n_(n_K108[m], k_K108[m]))
+        d2 = d_interface(n_(nm[m], km[m]), n_(n_K108[m], k_K108[m]))
         # 2 layer
-        p2 = P(fi_k108(w[m], n_(n_K108[m], k_K108[m]), d_K108, delta))
+        p2 = p_matrix(fi_k108(w[m], n_(n_K108[m], k_K108[m]), d_K108, delta))
         # 2/3 layer
-        d3 = D(n_(n_K108[m], k_K108[m]), n_vac)
+        d3 = d_interface(n_(n_K108[m], k_K108[m]), n_vac)
         # transfer matrix
         matrix_out = d3 @ p2 @ d2 @ p1 @ d1
         return matrix_out
@@ -253,15 +250,15 @@ def mmt_2000(par):
     def matrix(n):
         delta = np.linspace(-pi, pi, n)
         # 0/1 layer
-        d1 = D(n_vac, n_(nm, km))
+        d1 = d_interface(n_vac, n_(nm, km))
         # 1 layer
-        p1 = P(fi(w_2000, n_(nm, km), par[3]))
+        p1 = p_matrix(fi(w_2000, n_(nm, km), par[3]))
         # 1/2 layer
-        d2 = D(n_(nm, km), n_(n_th_w, k_th_w))
+        d2 = d_interface(n_(nm, km), n_(n_th_w, k_th_w))
         # 2 layer
-        p2 = P(fi_k108(w_2000, n_(n_th_w, k_th_w), d_K108, delta))
+        p2 = p_matrix(fi_k108(w_2000, n_(n_th_w, k_th_w), d_K108, delta))
         # 2/3 layer
-        d3 = D(n_(n_th_w, k_th_w), n_vac)
+        d3 = d_interface(n_(n_th_w, k_th_w), n_vac)
         # transfer matrix
         matrix_out = d3 @ p2 @ d2 @ p1 @ d1
         return matrix_out
@@ -299,15 +296,15 @@ def mmt_full(par):
     def matrix(n):
         delta = np.linspace(0, 2 * pi, n)
         # 0/1
-        d1 = D(n_vac, n_(nm[m], km[m]))
+        d1 = d_interface(n_vac, n_(nm[m], km[m]))
         # 1
-        p1 = P(fi(w_full[m], n_(nm[m], km[m]), par[3]))
+        p1 = p_matrix(fi(w_full[m], n_(nm[m], km[m]), par[3]))
         # 1/2
-        d2 = D(n_(nm[m], km[m]), n_(n_K108_full[m], k_K108_full[m]))
+        d2 = d_interface(n_(nm[m], km[m]), n_(n_K108_full[m], k_K108_full[m]))
         # 2
-        p2 = P(fi_k108(w_full[m], n_(n_K108_full[m], k_K108_full[m]), d_K108, delta))
+        p2 = p_matrix(fi_k108(w_full[m], n_(n_K108_full[m], k_K108_full[m]), d_K108, delta))
         # 2/3
-        d3 = D(n_(n_K108_full[m], k_K108_full[m]), n_vac)
+        d3 = d_interface(n_(n_K108_full[m], k_K108_full[m]), n_vac)
         # transfer matrix
         m_out = d3 @ p2 @ d2 @ p1 @ d1
         return m_out
@@ -349,7 +346,7 @@ def mmt_full(par):
 
 
 # ==========================================================#
-#           ZERO APPROXIMATION OF PARAMETERS               #
+#            ZERO APPROXIMATION OF PARAMETERS               #
 # ==========================================================#
 
 # this function create a bounds for Nelder - Mead minimize method
@@ -375,27 +372,24 @@ elif th == 5:
                  3.5, 5.0)
 
 elif th == 4:
-    bnd = bounds(1 * 10 ** (-5), 5 * 10 ** (-5),
+    bnd = bounds(1 * 10 ** (-5), 1.5 * 10 ** (-5),
                  5.0e20, 1.0e21,
                  1.0e13, 1.0e15,
                  3.5, 5.0)
 
 elif th == 3:
-    bnd = bounds(4 * 10 ** (-5), 5 * 10 ** (-5),
-                 10 ** 20, 10 ** 21,
-                 10 ** 14, 10 ** 15,
-                 3.5, 5.0)
+    bnd = bounds(1 * 10 ** (-5), 1.5 * 10 ** (-5), 5.0e20, 1.0e21, 1.0e13, 1.0e15, 3.5, 5.0)
 
 elif th == 2:
-    bnd = bounds(4 * 10 ** (-5), 5 * 10 ** (-5),
-                 10 ** 20, 10 ** 21,
-                 10 ** 13, 10 ** 15,
+    bnd = bounds(0.8 * 10 ** (-5), 1.5 * 10 ** (-5),
+                 5.0e20, 1.0e21,
+                 1.0e13, 1.0e15,
                  3.5, 5.0)
 
 elif th == 1:
-    bnd = bounds(4 * 10 ** (-5), 5 * 10 ** (-5),
-                 10 ** 20, 10 ** 21,
-                 10 ** 14, 10 ** 15,
+    bnd = bounds(0.6 * 10 ** (-5), 1.5 * 10 ** (-5),
+                 5.0e20, 1.0e21,
+                 1.0e13, 1.0e15,
                  3.5, 5.0)
 
 # ==========================================================#
@@ -406,7 +400,7 @@ elif th == 1:
 def func(par):  # target function that use for describe of amount error between theoretical and experimental value
     alfa = 1  # mass function
     beta = 1  # mass function
-    gamma = 2  # mass function
+    gamma = 4  # mass function
     r = mmt_2000(par)
     r_th_2000 = float(r[1, :])
     t_th_2000 = float(r[0, :])
@@ -417,12 +411,12 @@ def func(par):  # target function that use for describe of amount error between 
     long_wavelength_r = alfa * (abs(r_exp_2000 - r_th_2000) / abs(r_exp_2000))
     long_wavelength_t = beta * (abs(t_exp_2000 - t_th_2000) / abs(t_exp_2000))
     fun = short_wavelength + long_wavelength_r + long_wavelength_t
-    print('Parameters: ',
-          'Ne :', par[0],
-          'eps_inf: ', par[1],
-          '1/tau: ', par[2],
-          'd: ', par[3])
-    # need for control a amount of error
+    print('Parameters: ', '\n',
+          'Ne :', par[0], ' см^(-3)',
+          'eps_inf: ', par[1], '\n',
+          '1/tau: ', par[2], ' c',
+          'd: ', par[3] * 10 ** 7, ' нм', '\n')
+    # need for control  amount of error
     print('Target function: ', float(fun), '\n'
           'long wavelength transmitting: ', float(long_wavelength_t), '\n'
           'long wavelength reflectance: ', float(long_wavelength_r), '\n'
@@ -431,8 +425,8 @@ def func(par):  # target function that use for describe of amount error between 
 
 
 # zero approximation
-x0 = np.array([[9.0e+20, 3.91652396e+00,
-                9.17709028e+13, 1.6062110e-05]])
+x0 = np.array([7.777246690278054298e+20, 3.987948500270056762e+00,
+               1.197806210506127031e+14, 8.704421391282538245e-06])
 # ans == result of minimization
 ans = sp.optimize.minimize(func, x0,
                            method='Nelder-Mead',  # the method of minimization our function
@@ -453,34 +447,34 @@ TR = np.array(mmt_full(x_res))
 # save result in txt file
 if th == 6:
     np.save('result\ TR6', TR)
-    np.save('result\ res', x_res)
+    np.save('result\ res6', x_res)
     np.savetxt('result\ TR6', TR)
-    np.savetxt('result\ res', x_res)
+    np.savetxt('result\ res6', x_res)
 elif th == 5:
-    np.save('result\ TR5', TR)
-    np.save('result\ res', x_res)
-    np.savetxt('result\ TR5', TR)
-    np.savetxt('result\ res', x_res)
+    np.save('result//TR5', TR)
+    np.save('result//res5', x_res)
+    np.savetxt('result//TR5', TR)
+    np.savetxt('result//res5', x_res)
 elif th == 4:
-    np.save('result\ TR4', TR)
-    np.save('result\ res', x_res)
-    np.savetxt('result\ TR4', TR)
-    np.savetxt('result\ res', x_res)
+    np.save('result//TR4', TR)
+    np.save('result//res4', x_res)
+    np.savetxt('result//TR4', TR)
+    np.savetxt('result//res4', x_res)
 elif th == 3:
     np.save('result\ TR3', TR)
-    np.save('result\ res', x_res)
-    np.savetxt('result\ res', x_res)
+    np.save('result\ res3', x_res)
+    np.savetxt('result\ res3', x_res)
     np.savetxt('result\ TR3', TR)
 elif th == 2:
     np.save('result\ TR2', TR)
-    np.save('result\ res', x_res)
+    np.save('result\ res2', x_res)
     np.savetxt('result\ TR2', TR)
-    np.savetxt('result\ res', x_res)
+    np.savetxt('result\ res2', x_res)
 elif th == 1:
     np.save('TR1', TR)
-    np.save('res', x_res)
+    np.save('TRtext/res1', x_res)
     np.savetxt('TR1', TR)
-    np.savetxt('res', x_res)
+    np.savetxt('res1', x_res)
 np.save('L', l1)
 np.savetxt('L', l1)
 end1 = time.time()

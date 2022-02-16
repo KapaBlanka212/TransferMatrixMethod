@@ -19,3 +19,16 @@ K8_ANSER/t+R
 K8_ANSER/T_max
 K8_ANSER/T_min
 NewWork.py
+*.xml
+.idea/pythonProject1.iml
+.idea/sonarlint/issuestore/index.pb
+.idea/workspace.xml
+result/TR1_EXP
+result/TR3_EXP
+result/TR2_EXP
+result/TR4_EXP
+result/TR6_EXP
+TR4_EXP
+TR5_EXP
+TR6_EXP
+*.npy
