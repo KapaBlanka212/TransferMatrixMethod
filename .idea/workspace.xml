@@ -5,26 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="87ae2209-2188-4bad-a14c-eecb49112ee7" name="Changes" comment="Add NKrootfinding&#10;Create new def in TR">
-      <change afterPath="$PROJECT_DIR$/dotmatread.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantNPY/ k_long.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantNPY/ k_short.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantNPY/ n_long.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantNPY/ n_short.npy" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ConstantNPY/R4_short.npy" beforeDir="false" afterPath="$PROJECT_DIR$/ConstantNPY/R4_short.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/NewWork.py" beforeDir="false" afterPath="$PROJECT_DIR$/NewWork.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/TR4_EXP" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TR5_EXP" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TR6_EXP" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TRCalculating.py" beforeDir="false" afterPath="$PROJECT_DIR$/TRCalculating.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TROptimization.py" beforeDir="false" afterPath="$PROJECT_DIR$/TROptimization.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/ TR4" beforeDir="false" afterPath="$PROJECT_DIR$/result/ TR4" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/ TR4.npy" beforeDir="false" afterPath="$PROJECT_DIR$/result/ TR4.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/ TR6" beforeDir="false" afterPath="$PROJECT_DIR$/result/ TR6" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/ TR6.npy" beforeDir="false" afterPath="$PROJECT_DIR$/result/ TR6.npy" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/ res" beforeDir="false" afterPath="$PROJECT_DIR$/result/ res" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/ res.npy" beforeDir="false" afterPath="$PROJECT_DIR$/result/ res.npy" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -64,8 +46,8 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../TransferMatrixMethod" />
-    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
     <option name="myPythonConsoleState">
@@ -84,7 +66,7 @@
       <recent name="C:\Users\Nikita\PycharmProjects\TransferMatrixMethod\K8_ANSER" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.TRCalculating">
+  <component name="RunManager" selected="Python.TROptimization">
     <configuration name="NKrootfinding" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -149,17 +131,17 @@
       <method v="2" />
     </configuration>
     <configuration name="TROptimization" type="PythonConfigurationType" factoryName="Python" singleton="false" nameIsGenerated="true">
-      <module name="pythonProject1" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
       <envs>
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
-      <option name="SDK_HOME" value="C:\Users\Nikita\PycharmProjects\pythonProject1\venv\Scripts\python.exe" />
+      <option name="SDK_HOME" value="C:\Users\admin.First\psychic-palm-tree\Scripts\python.exe" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
       <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/TROptimization.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />

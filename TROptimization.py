@@ -187,9 +187,9 @@ def mmt_short(par):
     tm = []  # list of T
     rm = []  # list of R
     a = 10
-    wp = w_p(9.578347227273248113e+20,
-             3.943554505613638739e+00)  # omega plas1mon
-    eps_ = eps(3.943554505613638739e+00, wp,
+    wp = w_p(9.84890e20,
+             4.03883)  # omega plas1mon
+    eps_ = eps(4.03883, wp,
                par[0], w)
     nm = np.array(n_m(eps_))
     km = np.array(k_m(eps_))
@@ -236,77 +236,23 @@ def mmt_short(par):
     return eqn1
 
 
-def mmt_2000(par):
-    a = 10
-    wp = w_p(9.578347227273248113e+20,
-             3.943554505613638739e+00)  # omega plasmon
-    eps_ = eps(3.943554505613638739e+00, wp,
-               par[0], w_l)
-    nm = n_m(eps_)
-    km = k_m(eps_)
-
-    def matrix(n):
-        delta = np.linspace(-pi, pi, n)
-        # 0/1 layer
-        d1 = D(n_vac, n_(nm, km))
-        # 1 layer
-        p1 = P(fi(w_l, n_(nm, km), par[1]))
-        # 1/2 layer
-        d2 = D(n_(nm, km), n_(n_th_w, k_th_w))
-        # 2 layer
-        p2 = P(fi_k108(w_l, n_(n_th_w, k_th_w), d_K108, delta))
-        # 2/3 layer
-        d3 = D(n_(n_th_w, k_th_w), n_vac)
-        # transfer matrix
-        matrix_out = d3 @ p2 @ d2 @ p1 @ d1
-        return matrix_out
-    mat1 = matrix(a)
-    mat2 = matrix(a * 2)
-    transmittance2 = tra_mat(mat2)
-    reflectance2 = re_mat(mat2)
-    transmittance1 = tra_mat(mat1)
-    reflectance1 = re_mat(mat1)
-    delta1 = np.linspace(0, 2 * pi, a)
-    delta2 = np.linspace(0, 2 * pi, 2 * a)
-    transmittance2_int = integrate.simpson(transmittance2, delta2) * CONST
-    reflectance2_int = integrate.simpson(reflectance2, delta2) * CONST
-    transmittance1_int = integrate.simpson(transmittance1, delta1) * CONST
-    reflectance1_int = integrate.simpson(reflectance1, delta1) * CONST
-    err_r = abs(reflectance1_int - reflectance2_int) / (abs(reflectance2_int))
-    err_t = abs(transmittance1_int - transmittance2_int) / (abs(transmittance2_int))
-    if err_r > 10 ** (-5):
-        a = 2 * a
-    if err_t > 10 ** (-5):
-        a = 2 * a
-    eqn1 = np.vstack((transmittance2_int, reflectance2_int))
-    return eqn1
-
-
 def func(par):  # target function
-    alfa = 1   # mass function
-    beta = 1   # mass function
-    gamma = 4   # mass function
-    r = mmt_2000(par)
-    r_th_2000 = float(r[1, :])
-    t_th_2000 = float(r[0, :])
     s = abs(mmt_short(par) - full_exp)
     s1 = s[0, :]
     s2 = s[1, :]
-    short_wavelength = gamma * ((np.sqrt((1 / index) * (np.sum(s1 ** 2)))) + np.sqrt((1 / index) * (np.sum(s2 ** 2))))
-    long_wavelength_r = alfa * (abs(r_exp_2000 - r_th_2000) / abs(r_exp_2000))
-    long_wavelength_t = beta * (abs(t_exp_2000 - t_th_2000) / abs(t_exp_2000))
-    fun = short_wavelength + long_wavelength_r + long_wavelength_t
+    short_wavelength = ((np.sqrt((1 / index) * (np.sum(s1 ** 2)))) + np.sqrt((1 / index) * (np.sum(s2 ** 2))))
+    fun = short_wavelength
     return fun
 
 
-d = np.linspace(4.25e-05, 4.75e-05, 70)
-t = np.linspace(1.15e14, 1.45e14, 70)
+d = np.linspace(444.597e-07 * 0.93, 444.597 * 1.07, 50)
+t = np.linspace(1.15731e14 * 0.93, 1.15731e14 * 1.07, 50)
 d_array = np.array(d)
 t_array = np.array(t)
 
 start = time.time()
-for j in range(0, 70):
-    for k in range(0, 70):
-        print(t[k], d[j], func(x(t[k], d[j])))
+for j in range(0, 50):
+    for k in range(0, 50):
+        print(10 ** 4 *(1.6 * 10 ** - 19) / (9.1 * 10 ** -31 * 0.35 * t[k]), d[j] * 10 ** 7, func(x(t[k], d[j])))
 end = time.time()
 print((end - start) / 3600)
