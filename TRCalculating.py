@@ -5,7 +5,6 @@ from numpy import pi
 import scipy as sp
 from scipy.optimize import minimize
 import scipy.integrate as integrate
-
 import MaterialConstant
 
 constant = MaterialConstant.MaterialConstant()
@@ -240,109 +239,6 @@ def mmt_short(par):
     return eqn1
 
 
-def mmt_2000(par):
-    a = 10
-    wp = w_p(par[0], par[1])  # omega plasmon
-    eps_ = eps(par[1], wp, par[2], w_2000)
-    nm = n_m(eps_)
-    km = k_m(eps_)
-
-    def matrix(n):
-        delta = np.linspace(-pi, pi, n)
-        # 0/1 layer
-        d1 = d_interface(n_vac, n_(nm, km))
-        # 1 layer
-        p1 = p_matrix(fi(w_2000, n_(nm, km), par[3]))
-        # 1/2 layer
-        d2 = d_interface(n_(nm, km), n_(n_th_w, k_th_w))
-        # 2 layer
-        p2 = p_matrix(fi_k108(w_2000, n_(n_th_w, k_th_w), d_K108, delta))
-        # 2/3 layer
-        d3 = d_interface(n_(n_th_w, k_th_w), n_vac)
-        # transfer matrix
-        matrix_out = d3 @ p2 @ d2 @ p1 @ d1
-        return matrix_out
-    mat1 = matrix(a)
-    mat2 = matrix(a * 2)
-    transmittance2 = tra_mat(mat2)
-    reflectance2 = re_mat(mat2)
-    transmittance1 = tra_mat(mat1)
-    reflectance1 = re_mat(mat1)
-    delta1 = np.linspace(0, 2 * pi, a)
-    delta2 = np.linspace(0, 2 * pi, 2 * a)
-    transmittance2_int = integrate.simpson(transmittance2, delta2) * CONST
-    reflectance2_int = integrate.simpson(reflectance2, delta2) * CONST
-    transmittance1_int = integrate.simpson(transmittance1, delta1) * CONST
-    reflectance1_int = integrate.simpson(reflectance1, delta1) * CONST
-    err_r = abs(reflectance1_int - reflectance2_int) / (abs(reflectance2_int))
-    err_t = abs(transmittance1_int - transmittance2_int) / (abs(transmittance2_int))
-    if err_r > 10 ** (-5):
-        a = 2 * a
-    if err_t > 10 ** (-5):
-        a = 2 * a
-    eqn1 = np.vstack((transmittance2_int, reflectance2_int))
-    return eqn1
-
-
-def mmt_full(par):
-    t_list_full = []  # list of T
-    r_list_full = []  # list of R
-    a = 10  # amount of dot on first integrate step
-    wp = w_p(par[0], par[1])  # omega plasmon
-    eps_ = eps(par[1], wp, par[2], w_full)
-    nm = (n_m(eps_))
-    km = (k_m(eps_))
-
-    def matrix(n):
-        delta = np.linspace(0, 2 * pi, n)
-        # 0/1
-        d1 = d_interface(n_vac, n_(nm[m], km[m]))
-        # 1
-        p1 = p_matrix(fi(w_full[m], n_(nm[m], km[m]), par[3]))
-        # 1/2
-        d2 = d_interface(n_(nm[m], km[m]), n_(n_K108_full[m], k_K108_full[m]))
-        # 2
-        p2 = p_matrix(fi_k108(w_full[m], n_(n_K108_full[m], k_K108_full[m]), d_K108, delta))
-        # 2/3
-        d3 = d_interface(n_(n_K108_full[m], k_K108_full[m]), n_vac)
-        # transfer matrix
-        m_out = d3 @ p2 @ d2 @ p1 @ d1
-        return m_out
-    for m in range(0, z):
-        # create transfer matrix
-        mat1 = matrix(a)
-        mat2 = matrix(a * 2)
-        # transmittance
-        transmittance1 = tra_mat(mat1)
-        transmittance2 = tra_mat(mat2)
-        # reflectance
-        reflectance2 = re_mat(mat2)
-        reflectance1 = re_mat(mat1)
-        # integration bounds
-        delta1 = np.linspace(0, 2 * pi, a)
-        delta2 = np.linspace(0, 2 * pi, 2 * a)
-        # transmittance with 2 * a dot for integrate
-        transmittance_int_2a = integrate.simpson(transmittance2, delta2) * (1 / (2 * pi))
-        # transmittance with a * a dot for integrate
-        transmittance_int_1a = integrate.simpson(transmittance1, delta1) * (1 / (2 * pi))
-        # reflectance with 2 * a dot
-        reflectance_int_2a = integrate.simpson(reflectance2, delta2) * (1 / (2 * pi))
-        # reflectance with a dof
-        reflectance_int_1a = integrate.simpson(reflectance1, delta1) * (1 / (2 * pi))
-        # need for stop increase number of dot a
-        err_r = abs(reflectance_int_1a - reflectance_int_2a) / (abs(reflectance_int_1a))
-        err_t = abs(transmittance_int_1a - transmittance_int_2a) / (abs(transmittance_int_1a))
-        if err_r > 10 ** -5:  # need for controlling amount of error of numerical integrate
-            a = 2 * a
-        if err_t > 10 ** -5:
-            a = 2 * a
-        r_list_full.append(reflectance_int_2a)  # add point in massive
-        t_list_full.append(transmittance_int_2a)  # add point in massive
-    tr_matrix_long = np.array(t_list_full)  # type list - > type matrix
-    re_matrix_long = np.array(r_list_full)
-    eqn1 = np.vstack((tr_matrix_long, re_matrix_long))  # massive of transfer matrix
-    eqn1 = np.transpose(eqn1)
-    return eqn1
 
 
 # ==========================================================#
@@ -387,7 +283,7 @@ elif th == 2:
                  3.5, 5.0)
 
 elif th == 1:
-    bnd = bounds(0.6 * 10 ** (-5), 1.5 * 10 ** (-5),
+    bnd = bounds(0.5 * 10 ** (-5), 1.5 * 10 ** (-5),
                  5.0e20, 1.0e21,
                  1.0e13, 1.0e15,
                  3.5, 5.0)
@@ -398,35 +294,24 @@ elif th == 1:
 
 
 def func(par):  # target function that use for describe of amount error between theoretical and experimental value
-    alfa = 1  # mass function
-    beta = 1  # mass function
-    gamma = 4  # mass function
-    r = mmt_2000(par)
-    r_th_2000 = float(r[1, :])
-    t_th_2000 = float(r[0, :])
     s = abs(mmt_short(par) - full_exp)
     s1 = s[0, :]
     s2 = s[1, :]
-    short_wavelength = gamma * ((np.sqrt((1 / index) * (np.sum(s1 ** 2)))) + np.sqrt((1/index) * (np.sum(s2 ** 2))))
-    long_wavelength_r = alfa * (abs(r_exp_2000 - r_th_2000) / abs(r_exp_2000))
-    long_wavelength_t = beta * (abs(t_exp_2000 - t_th_2000) / abs(t_exp_2000))
-    fun = short_wavelength + long_wavelength_r + long_wavelength_t
+    short_wavelength = np.sqrt((1 / index) * (np.sum(s1 ** 2))) + np.sqrt((1/index) * (np.sum(s2 ** 2)))
+    fun = short_wavelength
     print('Parameters: ', '\n',
           'Ne :', par[0], ' см^(-3)',
           'eps_inf: ', par[1], '\n',
           '1/tau: ', par[2], ' c',
           'd: ', par[3] * 10 ** 7, ' нм', '\n')
     # need for control  amount of error
-    print('Target function: ', float(fun), '\n'
-          'long wavelength transmitting: ', float(long_wavelength_t), '\n'
-          'long wavelength reflectance: ', float(long_wavelength_r), '\n'
-          'short wavelength in sum: ', short_wavelength, '\n')
+    print('function: = ', fun)
     return fun
 
 
 # zero approximation
-x0 = np.array([7.777246690278054298e+20, 3.987948500270056762e+00,
-               1.197806210506127031e+14, 8.704421391282538245e-06])
+x0 = np.array([7.94566e+20, 4.0957e+00,
+               1.22857e+14, 60.20e-09])
 # ans == result of minimization
 ans = sp.optimize.minimize(func, x0,
                            method='Nelder-Mead',  # the method of minimization our function
@@ -440,13 +325,11 @@ print(ans)
 # save ans
 x_res = ans.x
 # calculate for all wavelength
-index_full = n_K108_full.size
-z = index_full
-l1 = len_full * 10 ** 4
-TR = np.array(mmt_full(x_res))
+l1 = length * 10 ** 4
+TR = np.array(mmt_short(x_res))
 # save result in txt file
 if th == 6:
-    np.save('result\ TR6', TR)
+    np.save('result\TR6', TR)
     np.save('result\ res6', x_res)
     np.savetxt('result\ TR6', TR)
     np.savetxt('result\ res6', x_res)

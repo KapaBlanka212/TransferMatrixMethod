@@ -187,9 +187,9 @@ def mmt_short(par):
     tm = []  # list of T
     rm = []  # list of R
     a = 10
-    wp = w_p(9.84890e20,
-             4.03883)  # omega plas1mon
-    eps_ = eps(4.03883, wp,
+    wp = w_p(7.95124841e+20,
+             4.09784727e+00)  # omega plas1mon
+    eps_ = eps(4.09784727e+00, wp,
                par[0], w)
     nm = np.array(n_m(eps_))
     km = np.array(k_m(eps_))
@@ -245,14 +245,15 @@ def func(par):  # target function
     return fun
 
 
-d = np.linspace(444.597e-07 * 0.93, 444.597 * 1.07, 50)
-t = np.linspace(1.15731e14 * 0.93, 1.15731e14 * 1.07, 50)
+amount = 70
+d = np.linspace(69.199e-07 * 0.93, 69.99e-07 * 1.07, amount)
+t = np.linspace(1.2643e14 * 0.85, 1.2643e14 * 1.15, amount)
 d_array = np.array(d)
 t_array = np.array(t)
 
 start = time.time()
-for j in range(0, 50):
-    for k in range(0, 50):
-        print(10 ** 4 *(1.6 * 10 ** - 19) / (9.1 * 10 ** -31 * 0.35 * t[k]), d[j] * 10 ** 7, func(x(t[k], d[j])))
+for j in range(0, amount):
+    for k in range(0, amount):
+        print(10 ** 4 * (1.6 * 10 ** - 19) / (9.1 * 10 ** -31 * 0.35 * t[k]), d[j] * 10 ** 7, func(x(t[k], d[j])))
 end = time.time()
 print((end - start) / 3600)
