@@ -5,14 +5,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="87ae2209-2188-4bad-a14c-eecb49112ee7" name="Changes" comment="Add NKrootfinding&#10;Create new def in TR">
-      <change afterPath="$PROJECT_DIR$/teks315" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/текст2.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/215.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/345.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TRCalculating.py" beforeDir="false" afterPath="$PROJECT_DIR$/TRCalculating.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TROptimization.py" beforeDir="false" afterPath="$PROJECT_DIR$/TROptimization.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/ TR2" beforeDir="false" afterPath="$PROJECT_DIR$/result/ TR2" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/ TR3" beforeDir="false" afterPath="$PROJECT_DIR$/result/ TR3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/result/ res2" beforeDir="false" afterPath="$PROJECT_DIR$/result/ res2" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,7 +49,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/PycharmProjects/Melentiev/Rep" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">

@@ -274,7 +274,10 @@ elif th == 4:
                  3.5, 5.0)
 
 elif th == 3:
-    bnd = bounds(1 * 10 ** (-5), 1.5 * 10 ** (-5), 5.0e20, 1.0e21, 1.0e13, 1.0e15, 3.5, 5.0)
+    bnd = bounds(1 * 10 ** (-5), 1.5 * 10 ** (-5),
+                 5.0e20, 1.0e21,
+                 1.0e13, 1.0e15,
+                 3.5, 5.0)
 
 elif th == 2:
     bnd = bounds(0.8 * 10 ** (-5), 1.5 * 10 ** (-5),
@@ -310,8 +313,10 @@ def func(par):  # target function that use for describe of amount error between 
 
 
 # zero approximation
-x0 = np.array([7.94566e+20, 4.0957e+00,
-               1.22857e+14, 60.20e-09])
+x0 = np.array([7.78393814e+20,
+               3.99248545e+00,
+               1.27094097e+14,
+               11.69166836e-06])
 # ans == result of minimization
 ans = sp.optimize.minimize(func, x0,
                            method='Nelder-Mead',  # the method of minimization our function
@@ -326,7 +331,7 @@ print(ans)
 x_res = ans.x
 # calculate for all wavelength
 l1 = length * 10 ** 4
-TR = np.array(mmt_short(x_res))
+TR = np.transpose(np.array(mmt_short(x_res)))
 # save result in txt file
 if th == 6:
     np.save('result\TR6', TR)
