@@ -5,11 +5,23 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="87ae2209-2188-4bad-a14c-eecb49112ee7" name="Changes" comment="Add NKrootfinding&#10;Create new def in TR">
-      <change afterPath="$PROJECT_DIR$/215.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/345.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/315" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/515.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/545.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/345.txt" beforeDir="false" afterPath="$PROJECT_DIR$/345.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TRCalculating.py" beforeDir="false" afterPath="$PROJECT_DIR$/TRCalculating.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TROptimization.py" beforeDir="false" afterPath="$PROJECT_DIR$/TROptimization.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/TRtext/L" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TRtext/L.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TRtext/full_wavelength" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TRtext/k_long" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TRtext/k_short" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TRtext/n_long" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TRtext/n_short" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TRtext/res" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TRtext/res.npy" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/TRtext/wl" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,7 +61,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$USER_HOME$/PycharmProjects/Melentiev/Rep" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
