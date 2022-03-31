@@ -128,7 +128,7 @@ def fi_k108(fr, n, d, delta):
 
 def eps(eps_inf, wp, t, fr):
     wp2 = wp ** 2
-    w_ = fr*(fr+i*t)
+    w_ = fr * (fr + i * t)
     eps_return = eps_inf * (1.0 - wp2 / w_)
     return eps_return
 
@@ -262,7 +262,7 @@ if th == 6:
                  3.5, 4.5)
 
 elif th == 5:
-    bnd = bounds(4.0e-5, 5.0e-5,
+    bnd = bounds(1.0e-5, 5.0e-5,
                  1.0e20, 1.0e21,
                  1.0e14, 1.0e15,
                  3.5, 5.0)
@@ -313,10 +313,7 @@ def func(par):  # target function that use for describe of amount error between 
 
 
 # zero approximation
-x0 = np.array([7.78393814e+20,
-               3.99248545e+00,
-               1.27094097e+14,
-               11.69166836e-06])
+x0 = np.array([8.95308842e+20, 4.02613498e+00, 1.20176453e+14, 1.82192422e-05])
 # ans == result of minimization
 ans = sp.optimize.minimize(func, x0,
                            method='Nelder-Mead',  # the method of minimization our function
@@ -334,10 +331,10 @@ l1 = length * 10 ** 4
 TR = np.transpose(np.array(mmt_short(x_res)))
 # save result in txt file
 if th == 6:
-    np.save('result\TR6', TR)
-    np.save('result\ res6', x_res)
-    np.savetxt('result\ TR6', TR)
-    np.savetxt('result\ res6', x_res)
+    np.save('result//TR6', TR)
+    np.save('result//res6', x_res)
+    np.savetxt('result//TR6', TR)
+    np.savetxt('result//res6', x_res)
 elif th == 5:
     np.save('result//TR5', TR)
     np.save('result//res5', x_res)
@@ -349,20 +346,20 @@ elif th == 4:
     np.savetxt('result//TR4', TR)
     np.savetxt('result//res4', x_res)
 elif th == 3:
-    np.save('result\ TR3', TR)
-    np.save('result\ res3', x_res)
-    np.savetxt('result\ res3', x_res)
-    np.savetxt('result\ TR3', TR)
+    np.save('result//TR3', TR)
+    np.save('result//res3', x_res)
+    np.savetxt('result//res3', x_res)
+    np.savetxt('result//TR3', TR)
 elif th == 2:
-    np.save('result\ TR2', TR)
-    np.save('result\ res2', x_res)
-    np.savetxt('result\ TR2', TR)
-    np.savetxt('result\ res2', x_res)
+    np.save('result//TR2', TR)
+    np.save('result//res2', x_res)
+    np.savetxt('result//TR2', TR)
+    np.savetxt('result//res2', x_res)
 elif th == 1:
-    np.save('TR1', TR)
-    np.save('TRtext/res1', x_res)
-    np.savetxt('TR1', TR)
-    np.savetxt('res1', x_res)
+    np.save('result//TR1', TR)
+    np.save('result//res1', x_res)
+    np.savetxt('result//TR1', TR)
+    np.savetxt('result//res1', x_res)
 np.save('L', l1)
 np.savetxt('L', l1)
 end1 = time.time()

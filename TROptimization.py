@@ -166,9 +166,9 @@ def D(n1, n2):
     return d_out
 
 
-def x(t_film, d_film):
-    x_out = np.array([t_film,  # concentration
-                      d_film])  # electron relaxation time
+def x(Ne_film, t_film):
+    x_out = np.array([Ne_film, # concentration
+                      t_film])  # electron relaxation time
 
     return x_out
 
@@ -187,10 +187,9 @@ def mmt_short(par):
     tm = []  # list of T
     rm = []  # list of R
     a = 10
-    wp = w_p(7.783938117773045268e+20,
-             3.992485472984658834e+00)  # omega plasma
-    eps_ = eps(3.992485472984658834e+00, wp,
-               par[0], w)
+    wp = w_p(par[0], 4.01)  # omega plasma
+    eps_ = eps(4.01, wp,
+               par[1], w)
     nm = np.array(n_m(eps_))
     km = np.array(k_m(eps_))
 
@@ -199,7 +198,7 @@ def mmt_short(par):
         # 0/1 layer
         d1 = D(n_vac, n_(nm[m], km[m]))
         # 1 layer
-        p1 = P(fi(w[m], n_(nm[m], km[m]), par[1]))
+        p1 = P(fi(w[m], n_(nm[m], km[m]), 154 * 10 ** -7))
         # 1/2 layer
         d2 = D(n_(nm[m], km[m]), n_(n_K108[m], k_K108[m]))
         # 2 layer
@@ -245,16 +244,16 @@ def func(par):  # target function
     return fun
 
 
+mu_ = 37
+t_ = 10 ** 4 * (1.6 * 10 ** -19) / (9.1 * 10 ** -31 * 0.35 * mu_)
 amount = 70
 procent = 0.15
-d = np.linspace(8.691668400142825717e-06 * (1 - procent), 8.691668400142825717e-06 * (1 + procent), amount)
-t = np.linspace(1.270940951083899375e+14 * (1 - procent), 1.270940951083899375e+14 * (1 + procent), amount)
-d_array = np.array(d)
-t_array = np.array(t)
+Ne = np.linspace(7.9e20 * (1 - procent), 7.9e20 * (1 + procent), amount)
+t = np.linspace(t_ * (1 - procent),  t_ * (1 + procent), amount)
 
 start = time.time()
 for j in range(0, amount):
     for k in range(0, amount):
-        print( d[j] * 10 ** 7, 10 ** 4 * (1.6 * 10 ** - 19) / (9.1 * 10 ** -31 * 0.35 * t[k]), func(x(t[k], d[j])))
+        print(Ne[k], 10 ** 4 * (1.6 * 10 ** - 19) / (9.1 * 10 ** -31 * 0.35 * t[j]), func(x(Ne[k], t[j])))
 end = time.time()
 print((end - start) / 3600)
