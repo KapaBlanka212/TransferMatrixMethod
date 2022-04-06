@@ -6,16 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="87ae2209-2188-4bad-a14c-eecb49112ee7" name="Changes" comment="Add NKrootfinding&#10;Create new def in TR">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/215.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/315" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/345.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/515.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/545.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/TRCalculating.py" beforeDir="false" afterPath="$PROJECT_DIR$/TRCalculating.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TROptimization.py" beforeDir="false" afterPath="$PROJECT_DIR$/TROptimization.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/teks315" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/текст.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/текст2.txt" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
