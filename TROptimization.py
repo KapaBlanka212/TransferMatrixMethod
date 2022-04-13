@@ -198,7 +198,7 @@ def mmt_short(par):
         # 0/1 layer
         d1 = D(n_vac, n_(nm[m], km[m]))
         # 1 layer
-        p1 = P(fi(w[m], n_(nm[m], km[m]), 154 * 10 ** -7))
+        p1 = P(fi(w[m], n_(nm[m], km[m]), 445 * 10 ** -7))
         # 1/2 layer
         d2 = D(n_(nm[m], km[m]), n_(n_K108[m], k_K108[m]))
         # 2 layer
@@ -244,16 +244,18 @@ def func(par):  # target function
     return fun
 
 
-mu_ = 37
+mu_ = 44
 t_ = 10 ** 4 * (1.6 * 10 ** -19) / (9.1 * 10 ** -31 * 0.35 * mu_)
 amount = 70
 procent = 0.15
-Ne = np.linspace(7.9e20 * (1 - procent), 7.9e20 * (1 + procent), amount)
-t = np.linspace(t_ * (1 - procent),  t_ * (1 + procent), amount)
+Ne = 9.8e20
+Ne_bound = np.linspace(Ne * (1 - procent), Ne * (1 + procent), amount)
+t_bound = np.linspace(t_ * (1 - procent),  t_ * (1 + procent), amount)
 
 start = time.time()
 for j in range(0, amount):
     for k in range(0, amount):
-        print(Ne[k], 10 ** 4 * (1.6 * 10 ** - 19) / (9.1 * 10 ** -31 * 0.35 * t[j]), func(x(Ne[k], t[j])))
+        print(Ne_bound[k], 10 ** 4 * (1.6 * 10 ** - 19) / (9.1 * 10 ** -31 * 0.35 * t_bound[j]), func(x(Ne_bound[k],
+                                                                                                        t_bound[j])))
 end = time.time()
 print((end - start) / 3600)

@@ -5,6 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="87ae2209-2188-4bad-a14c-eecb49112ee7" name="Changes" comment="Add NKrootfinding&#10;Create new def in TR">
+      <change afterPath="$PROJECT_DIR$/Ne_5.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Ne_6.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/result/Ne_1.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/TROptimization.py" beforeDir="false" afterPath="$PROJECT_DIR$/TROptimization.py" afterDir="false" />
     </list>
